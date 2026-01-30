@@ -7,19 +7,36 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+dist/
+dist-ssr/
 *.local
 
 # Editor directories and files
-.vscode/*
+.vscode/
 !.vscode/extensions.json
-.idea
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
+
+# IntelliJ IDEA (강력 추천 추가분)
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Visual Studio / C# (가져온 코드의 흔적 제거)
 *.sln
-*.sw?
-.env
+*.suo
+*.user
+*.userosscache
+*.sln.docuser
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# OS metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
