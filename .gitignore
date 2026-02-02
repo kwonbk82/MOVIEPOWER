@@ -1,42 +1,57 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# =================================================================
+# Root Integrated .gitignore (React + Spring Boot/JPA)
+# =================================================================
 
-# Dependencies
-node_modules/
-dist/
-dist-ssr/
-*.local
-
-# Editor directories and files
-.vscode/
-!.vscode/extensions.json
+### OS & IDE General ###
 .DS_Store
-
-# IntelliJ IDEA (강력 추천 추가분)
+Thumbs.db
+Desktop.ini
 .idea/
 *.iws
 *.iml
 *.ipr
 out/
+.vscode/
+!.vscode/extensions.json
 
-# Visual Studio / C# (가져온 코드의 흔적 제거)
+### Frontend (React) ###
+/front/node_modules/
+/front/dist/
+/front/dist-ssr/
+/front/build/
+/front/.env
+/front/.env.local
+/front/.env.development.local
+/front/.env.test.local
+/front/.env.production.local
+/front/*.local
+/front/npm-debug.log*
+/front/yarn-debug.log*
+/front/yarn-error.log*
+
+### Backend (Spring Boot / JPA) ###
+/back/HELP.md
+/back/.gradle
+/back/build/
+/back/bin/
+/back/out/
+/back/.apt_generated
+/back/.classpath
+/back/.factorypath
+/back/.project
+/back/.settings
+/back/.springBeans
+/back/.sts4-cache
+!/back/gradle/wrapper/gradle-wrapper.jar
+
+### Logs & Misc ###
+logs/
+*.log
+
+# Visual Studio / C# 흔적 제거
 *.sln
 *.suo
-*.user
-*.userosscache
-*.sln.docuser
 bin/
 obj/
-[Bb]in/
-[Oo]bj/
 
-# OS metadata
-Thumbs.db
-ehthumbs.db
-Desktop.ini
+.env

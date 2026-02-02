@@ -14,7 +14,7 @@ const InquiryWritePage = () => {
     const navigate = useNavigate(); //문의하기 홈링크
 
 
-    const categories = ["회원정보", "영화 추천", "수정 요청", "서비스"];
+    const categories = ["신고", "정보 수정", "이벤트 신청", "기타"];
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const handleClickk = (categorys) => {
