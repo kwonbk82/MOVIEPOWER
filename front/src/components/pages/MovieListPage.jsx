@@ -32,7 +32,7 @@ const MovieListPage = () => {
     const genre = searchParams.get('genre');
     const currentPage = searchParams.get('page') || '1';
     const numGenre = Number(genre);
-    const [movieSort, setMovieSort] = useState('vote_average.desc');
+    const [movieSort, setMovieSort] = useState('primary_release_date.desc');
     const [isReady, setIsReady] = useState(false);
     const [movie, setMovie] = useState([]);
     const [movieTop, setMovieTop] = useState([]);
