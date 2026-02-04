@@ -59,10 +59,10 @@
 }
 
 #SignupPage .sign-email input {
-  width: 510px;
+  width: 520px;
 }
 #SignupPage .sign-email .check {
-  width: 60px;
+  width: 50px;
   height: 50px;
   margin-top: 10px;
   margin-left: 8px;
@@ -71,6 +71,7 @@
   color: #121212;
   background-color: #dbdbdb;
   border-radius: 6px;
+
 }
 #SignupPage .sign-email .check:hover {
   background-color: #acabab;
@@ -138,7 +139,7 @@
   color: #fff;
   background-color: #9b9b9b;
 }
-#SignupPage .sign-gender .woman {
+#SignupPage .sign-gender .FEMALE {
   margin-left: 20px;
 }
 #SignupPage .sign-gender .active {

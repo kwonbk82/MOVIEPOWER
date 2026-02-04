@@ -43,7 +43,7 @@ public class User {
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false,length = 10)
     private Role role;
 
     public static User createUser(UserJoinDto dto, PasswordEncoder pe){

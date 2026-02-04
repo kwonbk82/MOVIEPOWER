@@ -18,8 +18,7 @@ public class SecurityConfig {
 
         //authorizeHttpRequests : 요청에 대한 인가를 설정
         http
-                //.authorizeHttpRequests(auth -> auth
-                //        .requestMatchers("/**").permitAll())
+
                 .csrf(csrf -> csrf
                         .disable())
 

@@ -1,54 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
-
-const members = [
-  {
-    id: 1724750000001,
-    name: "김철수",
-    email: "chulsoo@example.com",
-    password: "Chulsoo!23",
-    nickName: "철이",
-    gender: "male",
-    birthDate: "1995-03-15",
-  },
-  {
-    id: 1724750000002,
-    name: "이영희",
-    email: "younghee@example.com",
-    password: "Younghee#45",
-    nickName: "희희",
-    gender: "female",
-    birthDate: "1998-07-22",
-  },
-  {
-    id: 1724750000003,
-    name: "박민수",
-    email: "minsoo@example.com",
-    password: "Minsoo$78",
-    nickName: "수박",
-    gender: "male",
-    birthDate: "1992-11-05",
-  },
-  {
-    id: 1724750000004,
-    name: "최지은",
-    email: "jieun@example.com",
-    password: "Jieun@90!",
-    nickName: "지니",
-    gender: "female",
-    birthDate: "2000-01-10",
-  },
-  {
-    id: 1724750000005,
-    name: "정우성",
-    email: "woosung@example.com",
-    password: "WooSung*34",
-    nickName: "우성짱",
-    gender: "male",
-    birthDate: "1994-09-30",
-  },
-];
+import axios from "axios";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -75,7 +28,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [nickName, setNickName] = useState("");
-  const [gender, setGender] = useState("man");
+  const [gender, setGender] = useState("MALE");
   const [birthDate, setBirthDate] = useState("");
 
   // 비밀번호 비밀번호 확인 타입
@@ -91,15 +44,15 @@ const SignupPage = () => {
   const [isEmail, setIsEmail] = useState(false);
   const [isNickName, setIsNickName] = useState(false);
 
-  // 회원정보 저장
-  const [users, setUsers] = useState(members);
-
   // 비밀번호 유효성
   const [isPassword, setIsPassword] = useState(true);
   const [isPasswordCheck, setIsPasswordCheck] = useState(true);
 
   const [passwordMessage, setPasswordMessage] = useState("");
   const [passwordCheckMessage, setPasswordCheckMessage] = useState("");
+
+  //이메일 유효성
+  const [emailMessage, setEmailMessage] = useState("");
 
   // 비밀형식 확인
   const [isSignupPass, setIsSignupPass] = useState(false);
@@ -130,37 +83,73 @@ const SignupPage = () => {
     setBirthDate(e.target.value);
   };
 
-  const handleClickIsEmail = () => {
-    const emailRegExp =
-      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
-
-    if (!emailRegExp.test(email)) {
-      alert("이메일의 형식이 올바르지 않습니다!");
-      setIsEmail(false);
-    } else {
-      alert("사용가능한 이메일입니다.");
-      setIsEmail(true);
+  const handleClickIsEmail = async() => {
+    try {
+      const res = await axios.get("/api/user/check_email",{
+        params: { email: email }
+      })
+      if (res.data === true) {
+        alert("이미 사용중인 이메일입니다.");
+        setIsEmail(false);
+      } else {
+        alert("사용가능한 이메일입니다.");
+        setIsEmail(true);
+      }
+    }catch (e) {
+      console.error("이메일 중복 확인 실패:", e);
     }
   };
 
-  const handleClickIsNickName = () => {
-    if (!users.some((user) => user.nickName === nickName)) {
-      alert("사용가능한 닉네임입니다.");
-      setIsNickName(true);
-    } else {
-      alert("이미 사용중인 닉네임입니다.");
-      setIsNickName(false);
+  const handleClickIsNickName = async () => {
+    try {
+      const res = await axios.get("/api/user/check_nickName",{
+        params: { nickName: nickName }
+      })
+      if (res.data === true) {
+        alert("이미 사용중인 닉네임입니다.");
+        setIsNickName(false);
+      } else {
+        alert("사용가능한 닉네임입니다.");
+        setIsNickName(true);
+      }
+    }catch (e) {
+      console.error("닉네임 중복 확인 실패:", e);
     }
   };
 
   const handleClickIsCheck = () => {
     setIsCheck(!isCheck);
     if (!isCheck) {
-      setGender("man");
+      setGender("MALE");
     } else {
-      setGender("woman");
+      setGender("FEMALE");
     }
   };
+  //이메일 작성시 유효성 검사
+  const emailRegExp =
+      /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9.]*[A-Za-z]{2,3}$/;
+
+  useEffect(()=>{
+    if (!emailRef.current) return; // 연결 전 guard
+
+    if (!email) {
+      // 비어있을 때는 안내 숨기기
+      emailRef.current.style.display = "none";
+      setEmailMessage("");
+      return;
+    }
+    emailRef.current.style.display = "block";
+    if (!emailRegExp.test(email)) {
+      emailRef.current.style.color = "red";
+      setEmailMessage("이메일의 형식이 올바르지 않습니다!");
+      setIsEmail(true);
+      setIsSignupPass(false);
+    } else {
+      setEmailMessage("");
+      setIsEmail(true);
+      setIsSignupPass(true);
+    }
+  },[email])
 
   // 비밀번호 작성시 유효성 검사
   const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
@@ -228,7 +217,7 @@ const SignupPage = () => {
     }
   };
 
-  const handleClickSignup = () => {
+  const handleClickSignup = async () => {
     const nameValue = name.trim();
     const emailValue = email.trim();
     const passwordValue = password.trim();
@@ -266,32 +255,39 @@ const SignupPage = () => {
       return;
     }
     // 비밀번호 확인
-
     if (isEmail && isNickName && isSignupPass && password === passwordCheck) {
-      setUsers((prev) => [
-        ...prev,
-        {
-          id: new Date().getTime(),
+      try {
+        await axios.post("/api/user/join",{
           name,
           email,
           password,
           nickName,
           gender,
-          birthDate,
-        },
-      ]);
+          birthDate
+        });
+        alert(`회원가입이 완료되었습니다! 환영합니다 ${name}님`)
+        navigate("/");
+      }catch (e){
+        alert('회원가입에 실패하셨습니다')
+        console.error("회원가입 실패:", e);
+      }
+
     } else if (isEmail && isNickName && !isSignupPass) {
-      alert("비밀번호 형식이 확인해주세요.");
+      alert("비밀번호 형식을 확인해주세요.");
       return;
     } else if (isEmail && isNickName && password !== passwordCheck) {
       alert("비밀번호가 일치하지 않습니다");
       return;
-    } else {
+    } else if(!isNickName&&!isEmail){
       alert("이메일, 닉네임 확인을 해주세요.");
       return;
+    }else if(!isEmail){
+      alert("이메일을 확인해주세요.");
+      return;
+    }else if(!isNickName){
+      alert("닉네임을 확인해주세요.");
+      return;
     }
-
-    navigate("/");
   };
   return (
     <div id="SignupPage">
@@ -318,10 +314,10 @@ const SignupPage = () => {
             ref={emailFocusRef}
           />
           <button className="check" onClick={handleClickIsEmail}>
-            이메일 확인
+            중복 확인
           </button>
           <p className="noti" ref={emailRef}>
-            이메일을 입력해주세요.
+            {isEmail ? emailMessage : "이메일을 입력해주세요."}
           </p>
         </div>
         <div className="sign-password">
@@ -381,13 +377,13 @@ const SignupPage = () => {
         <div className="sign-gender">
           <p>성별</p>
           <button
-            className={`man ${isCheck ? "active" : ""}`}
+            className={`MALE ${isCheck ? "active" : ""}`}
             onClick={handleClickIsCheck}
           >
             남성
           </button>
           <button
-            className={`woman ${isCheck ? "" : "active"}`}
+            className={`FEMALE ${isCheck ? "" : "active"}`}
             onClick={handleClickIsCheck}
           >
             여성

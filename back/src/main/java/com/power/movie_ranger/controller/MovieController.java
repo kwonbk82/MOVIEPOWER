@@ -1,6 +1,5 @@
-package com.power.movie_ranger.movie;
+package com.power.movie_ranger.controller;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
