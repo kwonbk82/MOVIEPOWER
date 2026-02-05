@@ -44,6 +44,7 @@ const SignupPage = () => {
   const [isEmail, setIsEmail] = useState(false);
   const [isNickName, setIsNickName] = useState(false);
 
+
   // 비밀번호 유효성
   const [isPassword, setIsPassword] = useState(true);
   const [isPasswordCheck, setIsPasswordCheck] = useState(true);
@@ -94,6 +95,7 @@ const SignupPage = () => {
       } else {
         alert("사용가능한 이메일입니다.");
         setIsEmail(true);
+        emailRef.current.style.display = "none";
       }
     }catch (e) {
       console.error("이메일 중복 확인 실패:", e);
@@ -145,6 +147,7 @@ const SignupPage = () => {
       setIsEmail(true);
       setIsSignupPass(false);
     } else {
+      emailRef.current.style.color = "green";
       setEmailMessage("");
       setIsEmail(true);
       setIsSignupPass(true);

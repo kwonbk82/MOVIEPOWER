@@ -30,3 +30,7 @@ spring:
   tmdb:
     api:
       key: ${VITE_REACT_APP_MOVIE_API_KEY}
+
+
+  server:
+    port: 8080

@@ -18,7 +18,6 @@ public class UserService {
     public Long join(UserJoinDto dto){
         checkUser(dto);
         validateRequiredFields(dto);
-//        matchPassword(dto.getPassword(), dto.getPasswordConfirm());
         User user = User.createUser(dto,passwordEncoder);
         userRepository.save(user);
         return user.getId();
@@ -30,7 +29,7 @@ public class UserService {
     }
     public Boolean checkNickName(String nickName){
 
-        return userRepository.existsByEmail(nickName);
+        return userRepository.existsByNickName(nickName);
     }
 
     public void checkUser(UserJoinDto dto){
@@ -41,11 +40,6 @@ public class UserService {
             throw new IllegalStateException("이미 사용중인 닉네임입니다.");
     }
 
-//    public void matchPassword(String password, String confirm){
-//        if(!password.equals(confirm))
-//            throw new IllegalStateException("비밀번호와 비밀번호확인이 서로 일치하지 않습니다");
-//
-//    }
     private void validateRequiredFields(UserJoinDto dto) {
         if (dto.getGender() == null) {
             throw new IllegalStateException("성별을 선택해주세요.");

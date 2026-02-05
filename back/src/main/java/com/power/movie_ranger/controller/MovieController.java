@@ -9,7 +9,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173")
 public class MovieController {
 
     private final String apiKey;
@@ -71,7 +70,6 @@ public class MovieController {
     }
     // [공통 배달 메서드]
     private Object fetchFromTmdb(String url, Map<String, String> allParams) {
-        System.out.println("★ 현재 apiKey 변수의 값: [" + apiKey + "]");
         RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("api_key", apiKey);
