@@ -148,7 +148,7 @@ const SignupPage = () => {
       setIsSignupPass(false);
     } else {
       emailRef.current.style.color = "green";
-      setEmailMessage("");
+      setEmailMessage("이메일 중복확인이 필요합니다");
       setIsEmail(true);
       setIsSignupPass(true);
     }
@@ -257,7 +257,29 @@ const SignupPage = () => {
       birthDateFocusRef.current.focus();
       return;
     }
-    // 비밀번호 확인
+    if (!isEmail) {
+      alert("이메일 중복 확인을 완료해주세요.");
+      return;
+    }
+
+    // (2) 닉네임 중복 확인 여부
+    if (!isNickName) {
+      alert("닉네임 중복 확인을 완료해주세요.");
+      return;
+    }
+
+    // (3) 비밀번호 유효성(정규식) 확인
+    if (!isSignupPass) {
+      alert("비밀번호 형식을 확인해주세요.");
+      return;
+    }
+
+    // (4) 비밀번호와 확인용 비밀번호 일치 여부
+    if (password !== passwordCheck) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
     if (isEmail && isNickName && isSignupPass && password === passwordCheck) {
       try {
         await axios.post("/api/user/join",{
@@ -268,30 +290,14 @@ const SignupPage = () => {
           gender,
           birthDate
         });
-        alert(`회원가입이 완료되었습니다! 환영합니다 ${name}님`)
-        navigate("/");
+        alert(`회원가입이 완료되었습니다! 로그인 해주세요!`)
+        navigate("/", { state: { showLogin: true } });
       }catch (e){
         alert('회원가입에 실패하셨습니다')
         console.error("회원가입 실패:", e);
       }
-
-    } else if (isEmail && isNickName && !isSignupPass) {
-      alert("비밀번호 형식을 확인해주세요.");
-      return;
-    } else if (isEmail && isNickName && password !== passwordCheck) {
-      alert("비밀번호가 일치하지 않습니다");
-      return;
-    } else if(!isNickName&&!isEmail){
-      alert("이메일, 닉네임 확인을 해주세요.");
-      return;
-    }else if(!isEmail){
-      alert("이메일을 확인해주세요.");
-      return;
-    }else if(!isNickName){
-      alert("닉네임을 확인해주세요.");
-      return;
-    }
-  };
+  }
+    };
   return (
     <div id="SignupPage">
       <div className="signup-page">

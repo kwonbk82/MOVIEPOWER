@@ -17,6 +17,7 @@ import {
 import { Header, Footer } from "./components/common";
 
 import "./App.css";
+import MyPage from "./components/pages/MyPage.jsx";
 
 const Layout = () => {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Route element={<AdminPage />} path="/admin" />
             <Route element={<InquiryWritePage />} path="/inguirywrite" />
             <Route element={<SearchResultPage />} path="/search" />
+            <Route element={<MyPage />} path="/mypage"/>
           </Route>
         </Routes>
       </BrowserRouter>

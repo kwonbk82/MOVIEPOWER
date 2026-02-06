@@ -2,8 +2,11 @@ package com.power.movie_ranger.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,15 +26,24 @@ public class SecurityConfig {
 
         //authorizeHttpRequests : 요청에 대한 인가를 설정
         http
+                //CORS 설정
+                //리액트와 부트의 포트번호가 다르므로 포트번호를 명시적으로 설정
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
+                //CSRF 보호 대상 : 타임리프 폼, JSP, 세션 기반 로그인..
+                //템플릿 엔진을 사용하지 않으므로 비활성화
                 .csrf(csrf -> csrf
                         .disable())
+                //세션 관리 설정
+                //IF_REQUIRED : 세션이나 쿠키가 필요할 때 세션을 생성하도록 함
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**").permitAll()
-                );
-//            .formLogin(form -> form.disable());
+                )
+                .formLogin(form -> form.disable());
         return http.build();
     }
 
@@ -58,5 +70,11 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager
+            (AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }

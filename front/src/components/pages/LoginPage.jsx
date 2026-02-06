@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-const LoginPage = ({ isModal, modalClose }) => {
+import axios from "axios";
+const LoginPage = ({ isModal, setIsLogin, modalClose}) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -22,7 +23,26 @@ const LoginPage = ({ isModal, modalClose }) => {
       setIsPassType(false);
     }
   };
+  
+  const handleClickLogin = async (e)=>{
+    e.preventDefault();
+    try {
+      const res = await axios.post("api/user/login",{
+            email,
+            password,
+          });
 
+      if(res.status===200){
+        alert(`로그인되었습니다`)
+        setIsLogin(true);
+        modalClose();
+        navigate("/");
+      }
+    }catch (error) {
+      alert(error.response?.data?.message || "로그인에 실패했습니다.");
+      console.error("로그인 에러:", error);
+    }
+  }
   const handleClickGoSignUp = () => {
     modalClose();
     navigate("/signup");
@@ -63,7 +83,7 @@ const LoginPage = ({ isModal, modalClose }) => {
             </button>
           </div>
           <div className="sign-btn">
-            <button className="login">로그인</button>
+            <button className="login" onClick={handleClickLogin}>로그인</button>
             <p className="sign-or">또는</p>
             <button className="signup" onClick={handleClickGoSignUp}>
               회원가입

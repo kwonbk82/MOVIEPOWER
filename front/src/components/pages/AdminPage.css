@@ -1,9 +1,10 @@
 /* AdminPage.css 전체 */
 #AdminPage {
     width: 80%;
-    margin: 20px auto;
+    margin: 100px auto;
     font-family: "Arial", sans-serif; 
     color: #fff;
+    margin-bottom: 50px;
 }
 
 /* 공통 버튼 스타일 */

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import './Header.css';
-import HeaderSearchBar from './HeaderSearchBar'; // 1. 새로 만든 검색창 컴포넌트 임포트
+import HeaderSearchBar from './HeaderSearchBar';
 
 // 재사용 가능한 드롭다운 메뉴 컴포넌트
 const DropdownMenu = ({ title, to, items, dropdownClassName }) => {
@@ -51,13 +51,14 @@ const Header = () => {
     { path: '/events/goods', name: '굿즈' },
   ];
 
+  const [isLogin,setIsLogin] = useState(false);
   const [isModal, setIsModal] = useState(false);
-  const handleClickIsMdal = () => {
+  const handleClickIsModal = () => {
     setIsModal(!isModal);
   };
 
   const modalClose = () => {
-    setIsModal(!isModal);
+    setIsModal(false);
   };
 
   return (
@@ -95,11 +96,14 @@ const Header = () => {
       <div className="user-menu">
         {/* 3. 현재 경로가 메인('/')이 아닐 때만 검색창을 렌더링 */}
         {pathname !== '/' && <HeaderSearchBar />}
-        <button onClick={handleClickIsMdal}>로그인</button>
-        <Link to="/signup">회원가입</Link>
+        {isLogin ? <button>로그아웃</button> : <button onClick={handleClickIsModal}>로그인</button>}
+        {/*<button onClick={handleClickIsMdal}>로그인</button>*/}
+        {!isLogin && <Link to="/signup">회원가입</Link>}
+        {/*<Link to="/signup">회원가입</Link>*/}
       </div>
       <div className="isModal">
-        {<LoginPage isModal={isModal} modalClose={modalClose} />}
+        {<LoginPage isModal={isModal} setIsModal={setIsModal}
+                    setIsLogin={setIsLogin} modalClose={modalClose} />}
       </div>
     </header>
   );
