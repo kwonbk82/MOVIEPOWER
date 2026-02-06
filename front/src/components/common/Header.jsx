@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import './Header.css';
 import HeaderSearchBar from './HeaderSearchBar';
+import axios from "axios";
 
 // 재사용 가능한 드롭다운 메뉴 컴포넌트
 const DropdownMenu = ({ title, to, items, dropdownClassName }) => {
@@ -61,6 +62,19 @@ const Header = () => {
     setIsModal(false);
   };
 
+  const handleLogout = async ()=>{
+    try {
+      const res = await axios.post("/api/user/logout");
+      if(res.status===200) {
+        setIsLogin(false);
+        alert("로그아웃 되었습니다")
+      }
+    }catch (e) {
+      alert(e.response?.data?.message || "로그아웃에 실패했습니다.");
+      console.error("로그아웃 에러:", e);
+    }
+  }
+
   return (
     <header id="site-header">
       <div className="logo-area">
@@ -96,7 +110,7 @@ const Header = () => {
       <div className="user-menu">
         {/* 3. 현재 경로가 메인('/')이 아닐 때만 검색창을 렌더링 */}
         {pathname !== '/' && <HeaderSearchBar />}
-        {isLogin ? <button>로그아웃</button> : <button onClick={handleClickIsModal}>로그인</button>}
+        {isLogin ? <button onClick={handleLogout}>로그아웃</button> : <button onClick={handleClickIsModal}>로그인</button>}
         {/*<button onClick={handleClickIsMdal}>로그인</button>*/}
         {!isLogin && <Link to="/signup">회원가입</Link>}
         {/*<Link to="/signup">회원가입</Link>*/}

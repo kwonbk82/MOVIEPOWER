@@ -27,7 +27,7 @@ const LoginPage = ({ isModal, setIsLogin, modalClose}) => {
   const handleClickLogin = async (e)=>{
     e.preventDefault();
     try {
-      const res = await axios.post("api/user/login",{
+      const res = await axios.post("/api/user/login",{
             email,
             password,
           });
@@ -38,11 +38,12 @@ const LoginPage = ({ isModal, setIsLogin, modalClose}) => {
         modalClose();
         navigate("/");
       }
-    }catch (error) {
-      alert(error.response?.data?.message || "로그인에 실패했습니다.");
-      console.error("로그인 에러:", error);
+    }catch (e) {
+      alert(e.response?.data?.message || "로그인에 실패했습니다.");
+      console.error("로그인 에러:", e);
     }
   }
+
   const handleClickGoSignUp = () => {
     modalClose();
     navigate("/signup");
