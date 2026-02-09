@@ -1,7 +1,7 @@
 /*MainPage.jsx*/
 
 import { useState, useEffect } from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Virtual } from 'swiper/modules';
 import baseApi from '/public/data/api/api';
@@ -9,10 +9,9 @@ import baseApi from '/public/data/api/api';
 import './MainPage.css';
 import 'swiper/css';
 import 'swiper/css/virtual';
+import {LoginPage} from "./index.js";
 
 function MainPage() {
-  const location = useLocation();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [topMovies, setTopMovies] = useState([]);
@@ -88,13 +87,6 @@ function MainPage() {
     return () => clearInterval(intervalId);
   }, []);
 
-  useEffect(() => {
-    if (location.state?.showLogin) {
-      setIsLoginModalOpen(true);
-
-      // window.history.replaceState({}, document.title);
-    }
-  }, [location]);
   // 검색 실행 함수
   const handleSearch = () => {
     if (!searchTerm.trim()) {
@@ -132,7 +124,6 @@ function MainPage() {
   };
   return (
     <div id="MainPage">
-      {isLoginModalOpen && <LoginModal onClose={() => setIsLoginModalOpen(false)} />}
       <div className="container">
         <div className="search-bar">
           <input

@@ -223,7 +223,9 @@ li {
   text-decoration: none;
   transition: color 0.2s ease;
 }
-
+.user-menu span{
+  color: #c9c7c7;
+}
 /* 마우스 올렸을 때 효과 */
 .user-menu button:hover,
 .user-menu a:hover {

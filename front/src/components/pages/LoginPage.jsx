@@ -1,9 +1,11 @@
-import { useState } from "react";
+import {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 import "./LoginPage.css";
-import axios from "axios";
-const LoginPage = ({ isModal, setIsLogin, modalClose}) => {
+
+const LoginPage = ({ isModal, modalClose}) => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,25 +25,21 @@ const LoginPage = ({ isModal, setIsLogin, modalClose}) => {
       setIsPassType(false);
     }
   };
-  
+
   const handleClickLogin = async (e)=>{
     e.preventDefault();
-    try {
-      const res = await axios.post("/api/user/login",{
-            email,
-            password,
-          });
 
-      if(res.status===200){
+    const result = await login();
+      if(result.success){
         alert(`로그인되었습니다`)
-        setIsLogin(true);
+        setEmail("")
+        setPassword("")
         modalClose();
         navigate("/");
+      }else {
+        alert(result.message)
       }
-    }catch (e) {
-      alert(e.response?.data?.message || "로그인에 실패했습니다.");
-      console.error("로그인 에러:", e);
-    }
+
   }
 
   const handleClickGoSignUp = () => {

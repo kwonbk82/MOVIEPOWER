@@ -17,7 +17,6 @@ public class UserService {
 
     public Long join(UserJoinDto dto){
         checkUser(dto);
-        validateRequiredFields(dto);
         User user = User.createUser(dto,passwordEncoder);
         userRepository.save(user);
         return user.getId();
@@ -32,15 +31,15 @@ public class UserService {
         return userRepository.existsByNickName(nickName);
     }
 
-    public void checkUser(UserJoinDto dto){
-        if(userRepository.existsByEmail(dto.getEmail()))
+
+    private void checkUser(UserJoinDto dto) {
+
+        if(checkEmail(dto.getEmail()))
             throw new IllegalStateException("이미 사용중인 이메일입니다.");
 
-        if(userRepository.existsByNickName(dto.getNickName()))
+        if(checkNickName(dto.getNickName()))
             throw new IllegalStateException("이미 사용중인 닉네임입니다.");
-    }
 
-    private void validateRequiredFields(UserJoinDto dto) {
         if (dto.getGender() == null) {
             throw new IllegalStateException("성별을 선택해주세요.");
         }

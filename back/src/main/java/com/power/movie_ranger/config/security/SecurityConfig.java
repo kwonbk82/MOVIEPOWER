@@ -43,6 +43,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**").permitAll()
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/api/user/logout")
+                        .logoutSuccessHandler((req, res, auth) -> {
+                            //상태코드 200번(성공)만 전달
+                            res.setStatus(200);
+                        })
+                        .deleteCookies("JSESSIONID") // 로그아웃 시 세션 쿠키 삭제 명령 추가
+                        .invalidateHttpSession(true) // 서버 세션 무효화
+                )
+
                 .formLogin(form -> form.disable());
         return http.build();
     }
