@@ -64,7 +64,7 @@ const Header = () => {
   };
 
   const handleLogout = async ()=>{
-    const result = await logout(Email,Password);
+    const result = await logout();
       if(result.success) {
         alert("로그아웃 되었습니다");
         nav("/");

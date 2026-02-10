@@ -29,7 +29,7 @@ const LoginPage = ({ isModal, modalClose}) => {
   const handleClickLogin = async (e)=>{
     e.preventDefault();
 
-    const result = await login();
+    const result = await login(email,password);
       if(result.success){
         alert(`로그인되었습니다`)
         setEmail("")

@@ -13,13 +13,14 @@ export const AuthProvider = ({ children }) => {
             try {
                 // 1. 서버에 내 정보 요청
                 const res = await axios.get("/api/user/me", { withCredentials: true });
-                console.log(res.data);
                 // 2. 성공 시 유저 정보 저장
                 setUser(res.data);
             } catch (error) {
                 // 3. 에러 발생(로그인 안 됨 등) 시 유저 정보 초기화
                 setUser(null);
-                console.error("인증 확인 실패:", error);
+                if (error.response && error.response.status !== 401) {
+                    console.error("인증 확인 중 예상치 못한 에러:", error);
+                }
             } finally {
                 // 4. 성공하든 실패하든 로딩 상태는 해제
                 setLoading(false);
