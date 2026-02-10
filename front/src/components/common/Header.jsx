@@ -1,7 +1,7 @@
 // Header.jsx
 
 import { useState } from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import './Header.css';
 import HeaderSearchBar from './HeaderSearchBar';
@@ -34,7 +34,6 @@ const DropdownMenu = ({ title, to, items, dropdownClassName }) => {
 const Header = () => {
   const { pathname } = useLocation(); // 2. 현재 경로를 가져오기 위해 useLocation 사용
   const { user, logout, loading} = useAuth();
-  const nav = useNavigate();
 
   // 장르와 이벤트 데이터를 컴포넌트에 맞게 구조화
   const genreItems = [
@@ -67,7 +66,7 @@ const Header = () => {
     const result = await logout();
       if(result.success) {
         alert("로그아웃 되었습니다");
-        nav("/");
+        window.location.href = "/";
       }else {
         alert(result.message);
     }
@@ -110,7 +109,7 @@ const Header = () => {
         {pathname !== '/' && <HeaderSearchBar />}
         {user ? (
             <>
-              <span className="user-name">{user.email}님</span>
+              <span className="user-name">{user.nickName}님</span>
               <button onClick={handleLogout}>로그아웃</button>
               <Link to="/mypage">마이페이지</Link>
             </>

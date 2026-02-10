@@ -35,7 +35,7 @@ const LoginPage = ({ isModal, modalClose}) => {
         setEmail("")
         setPassword("")
         modalClose();
-        navigate("/");
+        window.location.href = "/";
       }else {
         alert(result.message)
       }
