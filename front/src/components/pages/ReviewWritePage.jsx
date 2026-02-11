@@ -6,13 +6,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ReviewWritePage = () => {
   const nav = useNavigate();
   const { id } = useParams();
-    const categories = ['단독', '연인', '가족', '친구', '단체'];
+    const categories = [
+        { key: "SOLO", label: "단독" },
+        { key: "COUPLE", label: "연인" },
+        { key: "FAMILY", label: "가족" },
+        { key: "FRIEND", label: "친구" },
+        { key: "GROUP", label: "단체" }];
     const todayString = new Date().toISOString().slice(0, 10);
     const MAX_CONTENT = 200;
 
     const [isReady, setIsReady] = useState(false);
     const [movie,setMovie] = useState();
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [accompany, setAccompany] = useState(null);
     const [date, setDate] = useState(todayString);
     const [content, setContent] = useState('');
     const [rating, setRating] = useState(0);
@@ -121,15 +126,15 @@ const ReviewWritePage = () => {
                         <h3>동행</h3>
                         {categories.map((category) => (
                             <button
-                                key={category}
+                                key={category.key}
                                 className={`categoryGroup ${
-                                    selectedCategory === category
+                                    accompany === category.key
                                         ? 'active'
                                         : ''
                                 }`}
-                                onClick={() => setSelectedCategory(category)}
+                                onClick={() => setAccompany(category.key)}
                             >
-                                {category}
+                                {category.label}
                             </button>
                         ))}
                     </div>

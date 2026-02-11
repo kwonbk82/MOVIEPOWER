@@ -86,7 +86,7 @@ const SignupPage = () => {
 
   const handleClickIsEmail = async() => {
     try {
-      const res = await axios.get("/api/user/check_email",{
+      const res = await axios.get("/api/user/check/email",{
         params: { email: email }
       })
       if (res.data === true) {
@@ -104,7 +104,7 @@ const SignupPage = () => {
 
   const handleClickIsNickName = async () => {
     try {
-      const res = await axios.get("/api/user/check_nickName",{
+      const res = await axios.get("/api/user/check/nickName",{
         params: { nickName: nickName }
       })
       if (res.data === true) {

@@ -1,14 +1,17 @@
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import {useEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 
-import './MyPage.css'; // CSS 파일 임포트
+import './MyPage.css';
+import axios from "axios";
+import {useAuth} from "../../contexts/AuthContext.jsx";
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('profile');
-
+  const [user,setUser] = useState("");
+  const {login} = useAuth();
+  const nav = useNavigate();
   // 데이터 샘플 (실제로는 API에서 가져오겠지?)
   const data = {
-    user: { name: "무비마스터", email: "admin@movie.com", grade: "Gold Member" },
     reviews: [
       { id: 1, movie: "조커", text: "호아킨 피닉스의 연기가 압도적임.", score: 5 },
       { id: 2, movie: "테넷", text: "한 번 봐서는 이해가 안 가네요..", score: 3.5 }
@@ -20,11 +23,32 @@ const MyPage = () => {
     ]
   };
 
+  useEffect(()=>{
+
+    userInfo();
+  },[]);
+
+  const userInfo = async ()=>{
+    try {
+      const res = await axios.get("/api/mypage/info");
+
+      if(res.status===200){
+        console.log(res);
+        setUser(res.data);
+      }
+    }catch (e) {
+      console.error("데이터 가져오기 실패:", e);    }
+  }
+
+
+  if (!user) {
+    return <div className="loading">로딩 중...</div>;
+  }
+
   return (
     <div className="mypage-container">
       {/* 사이드바 */}
       <nav className="sidebar">
-        <h2>박떼효기 님</h2>
         <ul>
           <li className={`menu-item ${activeTab === 'profile' ? 'active' : ''}`} 
               onClick={() => setActiveTab('profile')}>내 정보</li>
@@ -43,9 +67,12 @@ const MyPage = () => {
           <section>
             <h3 className="content-title">👤 내 정보</h3>
             <div className="info-card">
-              <p><strong>사용자명:</strong> {data.user.name}</p>
-              <p><strong>이메일:</strong> {data.user.email}</p>
-              <p><strong>멤버십:</strong> {data.user.grade}</p>
+              <p><strong>사용자명:</strong>{user.name}</p>
+              <p><strong>이메일:</strong>{user.email}</p>
+              <p><strong>닉네임:</strong>{user.nickName}</p>
+              <p><strong>성별:</strong>{user.gender==="MALE" ? "남" : "여"}</p>
+              <p><strong>생일:</strong>{user.birthDate}</p>
+              <p><strong>가입일:</strong>{user.regTime}</p>
             </div>
           </section>
         )}

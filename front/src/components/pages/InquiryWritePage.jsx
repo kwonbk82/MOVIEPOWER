@@ -14,21 +14,13 @@ const InquiryWritePage = () => {
     const navigate = useNavigate(); //문의하기 홈링크
 
 
-    const categories = ["신고", "정보 수정", "이벤트 신청", "기타"];
-    const [selectedCategory, setSelectedCategory] = useState(null);
-
-    const handleClickk = (categorys) => {
-        setCompletion(categorys);
-        alert(categorys + "");
-    };
-
-    const buttons = document.querySelectorAll(".categoryGroup");
-
-    // 클릭 시 실행할 함수 예시
-    const handleCategoryClick = (category) => {
-        setSelectedCategory(category);
-        // console.log(`${category} 선택됨`); // 필요하면 여기서 원하는 로직 실행
-    };
+    const categories = [
+        { key: "REPORT", label: "신고" },
+        { key: "MODIFY", label: "정보 수정" },
+        { key: "EVENT", label: "이벤트 신청" },
+        { key: "OTHERS", label: "기타" },
+    ];
+    const [type, setType] = useState(null);
 
     //글자 수
     const MAX_LENGTH = 30;
@@ -49,6 +41,10 @@ const InquiryWritePage = () => {
     //제목,내용 입력창,문의하기 띄우기
     const handleButtonClick = () => {
         let valid = true;
+        if (!selectedCategory) {
+            alert("문의 유형을 선택해주세요!");
+            valid = false;
+        }
         if (title.trim() === "") {
             setTitleError("제목을 입력해주세요!");
             valid = false;
@@ -72,11 +68,11 @@ const InquiryWritePage = () => {
                 <div className="Help">
                     {categories.map((category) => (
                         <button
-                            key={category}
-                            className={`categoryGroup ${selectedCategory === category ? "active" : ""}`}
-                            onClick={() => setSelectedCategory(category)}
+                            key={category.key}
+                            className={`categoryGroup ${type === category.key ? "active" : ""}`}
+                            onClick={() => setType(category.key)}
                         >
-                            {category}
+                            {category.label}
                         </button>
                     ))}
                 </div>
@@ -108,7 +104,7 @@ const InquiryWritePage = () => {
                         maxLength={MAX_CONTENT}
                     />
                     <div className="counter">
-                        {content.length}/{MAX_CONTENT} byte!
+                        {content.length}/{MAX_CONTENT} byte
                     </div>
                     {contentError && <p className="error-message">{contentError}</p>}
                 </div>
