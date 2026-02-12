@@ -14,13 +14,13 @@ const InquiryWritePage = () => {
     const navigate = useNavigate(); //문의하기 홈링크
 
 
-    const categories = [
-        { key: "REPORT", label: "신고" },
-        { key: "MODIFY", label: "정보 수정" },
-        { key: "EVENT", label: "이벤트 신청" },
-        { key: "OTHERS", label: "기타" },
-    ];
-    const [type, setType] = useState(null);
+    // const categories = [
+    //     { key: "REPORT", label: "신고" },
+    //     { key: "MODIFY", label: "정보 수정" },
+    //     { key: "EVENT", label: "이벤트 신청" },
+    //     { key: "OTHERS", label: "기타" },
+    // ];
+    // const [type, setType] = useState(null);
 
     //글자 수
     const MAX_LENGTH = 30;
@@ -41,10 +41,10 @@ const InquiryWritePage = () => {
     //제목,내용 입력창,문의하기 띄우기
     const handleButtonClick = () => {
         let valid = true;
-        if (!selectedCategory) {
-            alert("문의 유형을 선택해주세요!");
-            valid = false;
-        }
+        // if (!selectedCategory) {
+        //     alert("문의 유형을 선택해주세요!");
+        //     valid = false;
+        // }
         if (title.trim() === "") {
             setTitleError("제목을 입력해주세요!");
             valid = false;
@@ -63,20 +63,20 @@ const InquiryWritePage = () => {
 
     return (
         <div id="InquiryWritePage">
-            <div className="Help-inquirywr01">
-                <h2>문의 유형 선택</h2>
-                <div className="Help">
-                    {categories.map((category) => (
-                        <button
-                            key={category.key}
-                            className={`categoryGroup ${type === category.key ? "active" : ""}`}
-                            onClick={() => setType(category.key)}
-                        >
-                            {category.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
+            {/*<div className="Help-inquirywr01">*/}
+            {/*    <h2>문의 유형 선택</h2>*/}
+            {/*    <div className="Help">*/}
+            {/*        {categories.map((category) => (*/}
+            {/*            <button*/}
+            {/*                key={category.key}*/}
+            {/*                className={`categoryGroup ${type === category.key ? "active" : ""}`}*/}
+            {/*                onClick={() => setType(category.key)}*/}
+            {/*            >*/}
+            {/*                {category.label}*/}
+            {/*            </button>*/}
+            {/*        ))}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
             <div className="title-inquirywr01">
                 <h2>제목</h2>
                 <div className="title">

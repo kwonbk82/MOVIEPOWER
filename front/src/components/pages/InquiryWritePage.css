@@ -2,9 +2,9 @@
 
 #InquiryWritePage {
     font-family: 'Noto Sans KR', sans-serif;
-    width: 800px;
-    margin: 150px auto;
-    padding: 40px 20px 20px;
+    width: 750px;
+    margin: 80px auto;
+    padding: 40px 20px;
 }
 
 /* --- 공통 --- */
@@ -30,46 +30,47 @@
 }
 
 /* 버튼 클릭 */
-#InquiryWritePage .button {
-    background-color: #fff;
-    border: 1px solid #fff;
-    padding: 8px 16px;
-    cursor: pointer;  /* 마우스 손가락 모양 설정 */
-    transition: all 0.2s ease;
-    /* 부드러운 전환 */
-}
+/*#InquiryWritePage .button {*/
+/*    background-color: #fff;*/
+/*    border: 1px solid #fff;*/
+/*    padding: 8px 16px;*/
+/*    cursor: pointer;  !* 마우스 손가락 모양 설정 *!*/
+/*    transition: all 0.2s ease;*/
+/*    !* 부드러운 전환 *!*/
+/*}*/
 
-#InquiryWritePag .button:active {
-    background-color: #fff;
-    transform: scale(0.95);
-    /* 살짝 줄어드는 효과 */
-}
+/*#InquiryWritePag .button:active {*/
+/*    background-color: #fff;*/
+/*    transform: scale(0.95);*/
+/*    !* 살짝 줄어드는 효과 *!*/
+/*}*/
 
-#InquiryWritePage .categoryGroup {
-    flex: 1;
-    border: 1px solid #606060;
-    border-radius: 6px;
-    padding: 12px;
-    background: #fff;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s;
-}
+/*#InquiryWritePage .categoryGroup {*/
+/*    flex: 1;*/
+/*    border: 1px solid #606060;*/
+/*    border-radius: 6px;*/
+/*    padding: 12px;*/
+/*    background: #fff;*/
+/*    cursor: pointer;*/
+/*    font-size: 16px;*/
+/*    transition: all 0.2s;*/
+/*}*/
 
-#InquiryWritePage .categoryGroup:hover {
-    background-color: #3b3b3b;
-    color: #fff;
-}
+/*#InquiryWritePage .categoryGroup:hover {*/
+/*    background-color: #3b3b3b;*/
+/*    color: #fff;*/
+/*}*/
 
-#InquiryWritePage .categoryGroup.active {
-    background: #212121;
-    color: #fff;
-    border-color: #ffffff;
-}
+/*#InquiryWritePage .categoryGroup.active {*/
+/*    background: #212121;*/
+/*    color: #fff;*/
+/*    border-color: #ffffff;*/
+/*}*/
 
 /* --- 제목 / 내용 입력 박스 --- */
 #InquiryWritePage .title input {
     width: 80%;
+    height: 60px;
     padding: 10px;
     text-align: center;
     /* placeholder 포함 가운데 정렬 */
@@ -113,7 +114,7 @@
 
 /* --- 내용 입력창은 크게 --- */
 #InquiryWritePage .content input {
-    height: 120px;
+    height: 200px;
 }
 
 #InquiryWritePage .content {

@@ -53,6 +53,10 @@ const Header = () => {
     { path: '/events/goods', name: '굿즈' },
   ];
 
+  // const inquiryItems=[
+  //   { path: '/inguirywrite', name : '문의 작성'}
+  // ];
+
   const [isModal, setIsModal] = useState(false);
   const handleClickIsModal = () => {
     setIsModal(!isModal);
@@ -95,11 +99,17 @@ const Header = () => {
             items={eventItems}
             dropdownClassName="event-dropdown"
           />
+          {/*<DropdownMenu*/}
+          {/*    title="문의"*/}
+          {/*    to="/inguirywrite"*/}
+          {/*    items={inquiryItems}*/}
+          {/*    dropdownClassName="inquiry-dropdown"*/}
+          {/*/>*/}
 
-          {/* 문의 메뉴 (툴팁) */}
+           {/*문의 메뉴 (툴팁) */}
           <li className="tooltip-item">
             <Link to="/inguirywrite">문의</Link>
-            <span className="tooltip-text">문의 작성하기</span>
+            {/*<span className="tooltip-text">문의 작성하기</span>*/}
           </li>
         </ul>
       </nav>

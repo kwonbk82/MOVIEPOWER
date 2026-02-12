@@ -2,7 +2,7 @@
 #ReviewWritePage {
   color: #fff;
   width: 1200px;
-  margin: 200px auto;
+  margin: 100px auto;
 }
 
 #ReviewWritePage .review-wrap {
@@ -33,6 +33,12 @@
 #ReviewWritePage .review-write h3 {
   font-size: 25px;
   margin: 10px 0;
+}
+
+#ReviewWritePage .noti {
+  display: none;
+  font-size: 16px;
+  color: red;
 }
 
 #ReviewWritePage .review-stars {
