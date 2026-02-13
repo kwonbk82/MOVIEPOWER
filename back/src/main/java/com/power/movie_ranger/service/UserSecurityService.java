@@ -1,5 +1,6 @@
 package com.power.movie_ranger.service;
 
+import com.power.movie_ranger.config.security.CustomUserDetails;
 import com.power.movie_ranger.entity.User;
 import com.power.movie_ranger.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,5 @@ public class UserSecurityService implements UserDetailsService {
                 () -> new UsernameNotFoundException("사용자를 찾을 수 없습니다.")
         );
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole().toString())
-                .build();
-
-    }
+        return new CustomUserDetails(user);    }
 }

@@ -11,13 +11,15 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @ToString
 @Table(name="tb_user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseTimeEntity{
     @Id
     @Column(name="user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +47,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 10)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Inquiry> inquiries = new ArrayList<>();
 
     public static User createUser(UserJoinDto dto, PasswordEncoder pe){
         User user = new User();

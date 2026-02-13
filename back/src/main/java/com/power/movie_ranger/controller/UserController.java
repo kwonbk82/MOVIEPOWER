@@ -1,7 +1,9 @@
 package com.power.movie_ranger.controller;
 
+import com.power.movie_ranger.config.security.CustomUserDetails;
 import com.power.movie_ranger.dto.LoginRequestDto;
 import com.power.movie_ranger.dto.UserJoinDto;
+import com.power.movie_ranger.entity.User;
 import com.power.movie_ranger.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -74,15 +76,19 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
         // 필터에서 이미 인증을 걸러주기 때문에,
         // 시큐리티 설정만 잘 되어 있다면 userDetails가 null일 일은 없습니다.
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
+        User userInfo = userDetails.getUser();
+
 
         return ResponseEntity.ok().body(Map.of(
-                "email", userDetails.getUsername(),
+                "email", userInfo.getEmail(),
+                "id",userInfo.getId(),
+                "nickName",userInfo.getNickName(),
                 "role", userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList()
@@ -97,12 +103,12 @@ public class UserController {
         }
         return ResponseEntity.ok("로그아웃 성공");
     }
-    @GetMapping("/check_email")
+    @GetMapping("/check/email")
     public ResponseEntity<Boolean> checkEmail(@RequestParam("email") String email){
         boolean isDuplicate = userService.checkEmail(email);
         return ResponseEntity.ok(isDuplicate);
     }
-    @GetMapping("/check_nickName")
+    @GetMapping("/check/nickName")
     public ResponseEntity<Boolean> checkNickName(@RequestParam("nickName") String nickName){
         boolean isDuplicate = userService.checkNickName(nickName);
         return ResponseEntity.ok(isDuplicate);

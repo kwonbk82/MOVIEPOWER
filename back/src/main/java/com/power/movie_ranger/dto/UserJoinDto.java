@@ -15,26 +15,26 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class UserJoinDto {
-    @NotBlank(message = "이름를 입력해주세요.")
+    @NotBlank
     private String name;
 
-    @NotBlank(message = "이메일을 입력해주세요.")
+    @NotBlank
     @Email(message = "이메일 형식으로 입력해주세요")
     private String email;
 
-    @NotBlank(message = "비밀번호를 입력해주세요.")
+    @NotBlank
     @Length(min = 8,max = 16)
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
             message = "숫자+영문자+특수문자 조합으로 8자리 이상 입력")
     private String password;
 
-    @NotBlank(message = "닉네임을 입력해주세요.")
+    @NotBlank
     private String nickName;
 
-    @NotNull(message = "성별을 선택해주세요.")
+    @NotNull
     private Gender gender;
 
-    @NotNull(message = "생년월일을 선택해주세요.")
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 }

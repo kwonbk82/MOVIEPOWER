@@ -41,7 +41,11 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/api/discover/**","api/movie/**","api/person/**","api/search/**").permitAll()
+                        .requestMatchers("/api/user/join","/api/user/login","api/user/check/**").permitAll()
+                        .requestMatchers("/api/review/**","/api/mypage/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/user/logout")
@@ -52,6 +56,8 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID") // 로그아웃 시 세션 쿠키 삭제 명령 추가
                         .invalidateHttpSession(true) // 서버 세션 무효화
                 )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
 
                 .formLogin(form -> form.disable());
         return http.build();

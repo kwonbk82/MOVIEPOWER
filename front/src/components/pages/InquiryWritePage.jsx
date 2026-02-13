@@ -3,6 +3,7 @@
 import "./InquiryWritePage.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const InquiryWritePage = () => {
     const [completion, setCompletion] = useState(""); // 문의하기
@@ -10,7 +11,6 @@ const InquiryWritePage = () => {
     const [content, setContent] = useState(""); // 내용 글자수 카운팅
     const [titleError, setTitleError] = useState("");
     const [contentError, setContentError] = useState("");
-    const [error, setError] = useState("");
     const navigate = useNavigate(); //문의하기 홈링크
 
 
@@ -39,12 +39,11 @@ const InquiryWritePage = () => {
     };
 
     //제목,내용 입력창,문의하기 띄우기
-    const handleButtonClick = () => {
+    const handleButtonClick = async() => {
         let valid = true;
-        // if (!selectedCategory) {
-        //     alert("문의 유형을 선택해주세요!");
-        //     valid = false;
-        // }
+
+        setTitleError("");
+        setContentError("");
         if (title.trim() === "") {
             setTitleError("제목을 입력해주세요!");
             valid = false;
@@ -56,8 +55,25 @@ const InquiryWritePage = () => {
         if (!valid) return;
 
         const confirmed = window.confirm("문의 작성 완료하시겠습니까?");
-        if (confirmed) {
-            navigate("/"); // react-router-dom 사용 시 navigate로 이동
+        if (!confirmed) return;
+        try {
+            // 1. 서버에 데이터 전송 (주소는 실제 API 주소에 맞게 수정하세요)
+            // processed는 사용자가 보내는 게 아니라 서버에서 false로 시작하므로 제외해도 됩니다.
+            const response = await axios.post("/api/inquiry/create", {
+                title: title,
+                content: content
+            });
+
+            // 2. 성공 시
+            if (response.status === 200 || response.status === 201) {
+                alert("문의가 접수되었습니다.");
+                navigate("/");
+            }
+        } catch (error) {
+            // 3. 실패 시 (네트워크 에러, 서버 에러 등)
+            console.error("문의 작성 에러:", error);
+            const errorMessage = error.response?.data?.message || "서버 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+            alert(`문의 작성 실패: ${errorMessage}`);
         }
     };
 

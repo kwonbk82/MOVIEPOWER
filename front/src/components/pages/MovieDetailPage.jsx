@@ -78,30 +78,7 @@ const MovieDetailPage = () => {
                     <div className="left-info">
                         <div className="rating">
                             <span>평점</span>
-                            <p>{movieScore}점
-                                {/* {Array.from({
-                                    length: parseInt(movie.vote_average / 2),
-                                }).map((_, index) => (
-                                    <span
-                                        key={`filled-${index}`}
-                                        className="filled-star"
-                                    >
-                                        ★
-                                    </span>
-                                ))}
-                                {Array.from({
-                                    length:
-                                        5 - parseInt(movie.vote_average / 2),
-                                }).map((_, index) => (
-                                    <span
-                                        key={`empty-${index}`}
-                                        className="empty-star"
-                                    >
-                                        ☆
-                                    </span>
-                                ))} */}
-                            </p>
-                            {/* <strong>{parseInt(movie.vote_average / 2)}</strong> */}
+                            <p>{movieScore}점</p>
                         </div>
                         <div className="left-btn">
                             <button onClick={handleClickLike} className={`good-btn ${likeBtn ? 'active' : ''}`}>보고싶어요</button>

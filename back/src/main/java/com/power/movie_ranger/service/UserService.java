@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -21,6 +23,12 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
+
+//    public User findByEmail(String email){
+//        return userRepository.findByEmail(email)
+//                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+//    }
+
 
     public Boolean checkEmail(String email){
 
