@@ -46,4 +46,11 @@ public class ReviewService {
         return reviewMapper.entityToDtoList(reviews);
     }
 
+    public void increaseLikedCount(Long id){
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다."));
+
+        review.increaseLikedCount();
+
+    }
 }

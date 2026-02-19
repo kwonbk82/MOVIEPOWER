@@ -65,5 +65,8 @@ public class Review extends BaseEntity{
         return review;
     }
 
+    public void increaseLikedCount(){
+        this.liked += 1;
+    }
 
 }

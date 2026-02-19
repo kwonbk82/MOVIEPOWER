@@ -9,7 +9,7 @@ const MyPage = () => {
   const [user,setUser] = useState("");
   const [reviews,setReviews] = useState([]);
   const [wishlists,setWishlists] = useState("");
-  const [inquiries,setInquiries] = useState("");
+  const [inquiries,setInquiries] = useState([]);
 
   // 데이터 샘플 (실제로는 API에서 가져오겠지?)
   const data = {
@@ -67,7 +67,6 @@ const MyPage = () => {
     }catch (e) {
       console.error("데이터 가져오기 실패:", e);    }
   }
-  console.log(reviews);
 
   if (!user) {
     return <div className="loading">로딩 중...</div>;
@@ -141,7 +140,7 @@ const MyPage = () => {
             <h3 className="content-title">❓ 내 문의 현황</h3>
             {inquiries.map(q => (
               <div key={q.id} className="info-card" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{q.title} <small style={{ color: '#888' }}>({q.date})</small></span>
+                <span>{q.title} <small style={{ color: '#888' }}>({q.regTime})</small></span>
                 <span className={`status-badge ${q.process === 1 ? 'status-done' : 'status-wait'}`}>
                   {q.process === 1 ? "처리됨" : "미처리"}
                 </span>

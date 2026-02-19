@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState } from 'react';
 import './ReviewCard.css';
 
@@ -43,7 +42,7 @@ const ReviewCard = ({ review }) => {
             <div className="card-mid">
                 <div className="info-viewingdate">
                     <p>시청일</p>
-                    <p>{review.viewingate}</p>
+                    <p>{review.date}</p>
                 </div>
                 <div className="info-accompany">
                     <p>동행</p>
@@ -58,7 +57,7 @@ const ReviewCard = ({ review }) => {
                 >
                     좋아요
                 </button>
-                <p>{review.like+likeCount}</p>
+                <p>{review.liked+likeCount}</p>
             </div>
         </li>
     );

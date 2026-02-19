@@ -39,4 +39,10 @@ public class ReviewController {
         List<ReviewShowDto> reviews = reviewService.showMovieReviews(movieId);
         return ResponseEntity.ok(reviews);
     }
+
+    @PatchMapping("/{id}/liked")
+    public ResponseEntity<Void> increaseLikedCount(@PathVariable("id") @Min(1) Long id){
+        reviewService.increaseLikedCount(id);
+        return ResponseEntity.ok().build();
+    }
 }
