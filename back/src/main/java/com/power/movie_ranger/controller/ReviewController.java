@@ -1,15 +1,19 @@
 package com.power.movie_ranger.controller;
 
 import com.power.movie_ranger.config.security.CustomUserDetails;
+import com.power.movie_ranger.dto.ReviewShowDto;
 import com.power.movie_ranger.dto.ReviewWriteDto;
 import com.power.movie_ranger.dto.UserInfoDto;
 import com.power.movie_ranger.service.ReviewService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/review")
@@ -28,5 +32,11 @@ public class ReviewController {
         Long userId = reviewService.createReview(dto, userDetails.getId());
 
         return ResponseEntity.ok(userId);
+    }
+
+    @GetMapping("/movie/{id}")
+    public ResponseEntity<?> showMovieReviews(@PathVariable("id") @Min(1) Long movieId){
+        List<ReviewShowDto> reviews = reviewService.showMovieReviews(movieId);
+        return ResponseEntity.ok(reviews);
     }
 }

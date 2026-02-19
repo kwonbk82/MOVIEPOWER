@@ -106,7 +106,7 @@ const MovieDetailPage = () => {
                     </div>
                 </div>
             </div>
-            <ReviewList />
+            <ReviewList movie={movie}/>
             <h2>같은 장르 추천 영화</h2>
             <RecommendGenre genre={movie} movie={filteredGenreMovie} handleClickGenre={handleClickGenre}/>
             <h2>같은 감독의 다른 영화</h2>

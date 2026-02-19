@@ -41,6 +41,9 @@ public class ReviewService {
         return reviewMapper.entityToDtoList(reviews);
     }
 
-
+    public List<ReviewShowDto> showMovieReviews(Long movieId){
+        List<Review> reviews = reviewRepository.findByMovieId(movieId);
+        return reviewMapper.entityToDtoList(reviews);
+    }
 
 }

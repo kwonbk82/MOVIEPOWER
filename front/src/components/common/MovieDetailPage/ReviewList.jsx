@@ -4,13 +4,14 @@ import ReviewCard from './ReviewCard';
 import axios from 'axios';
 import './ReviewList.css';
 
-const ReviewList = () => {
+const ReviewList = ({movie}) => {
     const reviewListRef = useRef(null);
     const [isReady, setIsReady] = useState(false);
     const [review, setReview] = useState([]);
     const [sorted, setSorted] = useState('like');
     const [visibleCount, setVisibleCount] = useState(6);
     const [isMore,setIsMore] = useState(false);
+    const [movie,setMovie] = useState();
 
     useEffect(() => {
         fetchReview();
