@@ -3,6 +3,7 @@ package com.power.movie_ranger.entity;
 import com.power.movie_ranger.constant.Gender;
 import com.power.movie_ranger.constant.Role;
 import com.power.movie_ranger.dto.UserJoinDto;
+import com.power.movie_ranger.dto.UserUpdateDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -68,5 +69,29 @@ public class User extends BaseTimeEntity{
             user.role = Role.USER;
         }
         return user;
+    }
+
+    public void updateUser(UserUpdateDto dto, PasswordEncoder pe, Long loginId){
+        if(!this.id.equals(loginId)){
+            throw new IllegalArgumentException("수정 권한이 없습니다.");
+        }
+
+        if (dto.getName() != null) this.name = dto.getName();
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()){
+            this.password = pe.encode(dto.getPassword());
+        }
+        if (dto.getNickName() != null) this.nickName = dto.getNickName();
+        if (dto.getGender() != null) this.gender = dto.getGender();
+        if (dto.getBirthDate() != null) this.birthDate = dto.getBirthDate();
+    }
+
+    public boolean canManage(Review review) {
+        if (this.role == Role.ADMIN) return true; // 관리자는 무조건 패스
+        return review.getUser().getId().equals(this.id); // 아니면 본인 확인
+    }
+
+    public boolean canManage(Inquiry inquiry) {
+        if (this.role == Role.ADMIN) return true; // 관리자는 무조건 패스
+        return inquiry.getUser().getId().equals(this.id); // 아니면 본인 확인
     }
 }

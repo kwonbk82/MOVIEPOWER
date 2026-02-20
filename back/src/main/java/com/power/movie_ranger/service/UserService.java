@@ -1,6 +1,7 @@
 package com.power.movie_ranger.service;
 
 import com.power.movie_ranger.dto.UserJoinDto;
+import com.power.movie_ranger.dto.UserUpdateDto;
 import com.power.movie_ranger.entity.User;
 import com.power.movie_ranger.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,14 @@ public class UserService {
         User user = User.createUser(dto,passwordEncoder);
         userRepository.save(user);
         return user.getId();
+    }
+
+    public Long updateUser(Long targetId, UserUpdateDto dto,Long loginId){
+        User user = userRepository.findById(targetId)
+                .orElseThrow(() -> new RuntimeException("해당 아이디의 유저가 없습니다."));
+
+        user.updateUser(dto,passwordEncoder, loginId);
+        return loginId;
     }
 
 //    public User findByEmail(String email){

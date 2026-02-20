@@ -3,16 +3,14 @@ package com.power.movie_ranger.controller;
 import com.power.movie_ranger.config.security.CustomUserDetails;
 import com.power.movie_ranger.dto.InquiryWriteDto;
 import com.power.movie_ranger.dto.ReviewWriteDto;
+import com.power.movie_ranger.entity.Inquiry;
 import com.power.movie_ranger.service.InquiryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/inquiry")
@@ -31,6 +29,17 @@ public class InquiryController {
         Long userId = inquiryService.createInquiry(dto, userDetails.getId());
 
         return ResponseEntity.ok(userId);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> createInquiry(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                  @PathVariable Long id) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        inquiryService.deleteInquiry(id);
+        return ResponseEntity.ok(id);
     }
 
 }

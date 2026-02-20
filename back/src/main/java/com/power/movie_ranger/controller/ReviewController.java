@@ -2,6 +2,7 @@ package com.power.movie_ranger.controller;
 
 import com.power.movie_ranger.config.security.CustomUserDetails;
 import com.power.movie_ranger.dto.ReviewShowDto;
+import com.power.movie_ranger.dto.ReviewUpdateDto;
 import com.power.movie_ranger.dto.ReviewWriteDto;
 import com.power.movie_ranger.dto.UserInfoDto;
 import com.power.movie_ranger.service.ReviewService;
@@ -32,6 +33,28 @@ public class ReviewController {
         Long userId = reviewService.createReview(dto, userDetails.getId());
 
         return ResponseEntity.ok(userId);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateReview(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                          @Valid @RequestBody ReviewUpdateDto dto,
+                                            @PathVariable @Min(1) Long id){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        Long reviewId = reviewService.updateReview(dto,id, userDetails.getId());
+
+        return ResponseEntity.ok(reviewId);
+
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id,@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        reviewService.deleteReview(id, userDetails.getId());
+        return ResponseEntity.ok(id);
     }
 
     @GetMapping("/movie/{id}")

@@ -3,6 +3,7 @@ package com.power.movie_ranger.controller;
 import com.power.movie_ranger.config.security.CustomUserDetails;
 import com.power.movie_ranger.dto.LoginRequestDto;
 import com.power.movie_ranger.dto.UserJoinDto;
+import com.power.movie_ranger.dto.UserUpdateDto;
 import com.power.movie_ranger.entity.User;
 import com.power.movie_ranger.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -32,6 +34,15 @@ public class UserController {
     @PostMapping("/join")
     public ResponseEntity<Long> join(@RequestBody @Valid UserJoinDto dto){
         Long userId = userService.join(dto);
+        return ResponseEntity.ok(userId);
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateUserInfo(@PathVariable("id") Long targetId,
+                                            @RequestBody@Valid UserUpdateDto dto,
+                                            @AuthenticationPrincipal CustomUserDetails userDetails){
+
+        Long userId = userService.updateUser(targetId,dto,userDetails.getId());
         return ResponseEntity.ok(userId);
     }
 

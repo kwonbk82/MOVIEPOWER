@@ -1,6 +1,7 @@
 package com.power.movie_ranger.service;
 
 import com.power.movie_ranger.dto.ReviewShowDto;
+import com.power.movie_ranger.dto.ReviewUpdateDto;
 import com.power.movie_ranger.dto.ReviewWriteDto;
 import com.power.movie_ranger.entity.Review;
 import com.power.movie_ranger.entity.User;
@@ -31,7 +32,25 @@ public class ReviewService {
         return reviewRepository.save(review).getId();
     }
 
+    public Long updateReview(ReviewUpdateDto dto, Long id, Long userId){
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("해당 아이디의 유저가 없습니다."));
 
+        review.updateReview(dto,user);
+
+        return review.getId();
+    }
+
+    public void deleteReview(Long id,Long userId){
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다."));
+        if(!review.getUser().getId().equals(userId)){
+            throw new IllegalArgumentException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
+        }
+        reviewRepository.delete(review);
+    }
 
     public List<ReviewShowDto> showReviews(Long userId) {
             // 1. 엔티티 리스트 조회
