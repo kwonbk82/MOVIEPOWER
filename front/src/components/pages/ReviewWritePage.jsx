@@ -2,11 +2,12 @@
 import {useEffect, useRef, useState} from 'react';
 import './ReviewWritePage.css';
 import baseApi from '/public/data/api/api';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import axios from "axios";
 import {useAuth} from "../../contexts/AuthContext.jsx";
 const ReviewWritePage = () => {
   const nav = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const {user} = useAuth();
     const categories = [
@@ -17,6 +18,8 @@ const ReviewWritePage = () => {
         { key: "GROUP", label: "단체" }];
     // const todayString = new Date().toISOString().slice(0, 10);
     const MAX_CONTENT = 200;
+    const editData = location.state?.review; // 수정 시 넘어오는 데이터
+    const isEdit = !!editData; // 데이터가 있으면 true, 없으면 false (자동 판별)
 
     // noti
     const ratingRef = useRef();
@@ -27,11 +30,12 @@ const ReviewWritePage = () => {
     const [isReady, setIsReady] = useState(false);
     const [movie,setMovie] = useState();
     const [review,setReview] =useState({});
-    const [accompany, setAccompany] = useState(null);
-    const [date, setDate] = useState(null);
-    const [content, setContent] = useState('');
-    const [rating, setRating] = useState(0);
+    const [accompany, setAccompany] = useState(editData?.accompany || "");
+    const [date, setDate] = useState(editData?.date || "");
+    const [content, setContent] = useState(editData?.content || "");
+    const [rating, setRating] = useState(editData?.star || 0);
     const [hoverRating, setHoverRating] = useState(0);
+
     
         useEffect(() => {
             fetchMovie();
@@ -111,13 +115,25 @@ const ReviewWritePage = () => {
             contentRef.current.style.display = "block";
             isValid = false;
         }
-
+        const actionText = isEdit ? "수정" : "등록";
         if (!isValid) return;
-                if (!window.confirm("리뷰를 등록하시겠습니까?")) {
-                    return; // '취소' 클릭 시 중단
-                }
+        if (!window.confirm(`리뷰를 ${actionText}하시겠습니까?`)) {
+            return; // '취소' 클릭 시 중단
+        }
 
-                try {
+        try {
+            if(isEdit) {
+                const res = await axios.put(`/api/review/update/${editData.id}`,{
+                    star : rating,
+                    date,
+                    accompany,
+                    content
+                });
+                alert("리뷰가 수정되었습니다.")
+                setReview(res.data);
+                nav(-1);
+
+            }else{
                 const res = await axios.post("/api/review/create",{
                     movieId: id,
                     star : rating,
@@ -125,18 +141,22 @@ const ReviewWritePage = () => {
                     accompany,
                     content
                 });
-                window.confirm("리뷰가 등록되었습니다.")
+                alert("리뷰가 등록되었습니다.")
                 setReview(res.data);
-                nav(`/moviedetail/${id}`);
-
+                nav(-1);
+            }
         }catch (e) {
-            console.error("리뷰 등록 실패:", e);
-            alert("등록에 실패했습니다.")
+            console.error(`리뷰 ${actionText} 실패`, e);
+            alert(`${actionText}에 실패했습니다.`)
         }
 
     };
     if (!isReady) {
         return <div>데이터 로딩 중 ...</div>;
+    }
+    if(!user){
+        alert("로그인 후 이용 가능합니다.");
+        nav(-1);
     }
 
 
@@ -238,7 +258,7 @@ const ReviewWritePage = () => {
                     </div>
                 </div>
             </div>
-            <button className="review-done" onClick={handleClickWrite}>작성하기</button>
+            <button className="review-done" onClick={handleClickWrite}>{isEdit ? "수정하기" :"작성하기"}</button>
         </div>
     );
 };

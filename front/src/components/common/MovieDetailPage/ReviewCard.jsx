@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import './ReviewCard.css';
+import {useAuth} from "../../../contexts/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
+import {useDelete} from "../../../hooks/UseDelete.js";
+import axios from "axios";
 
 const ReviewCard = ({ review }) => {
     const [likeCount, setLikeCount] = useState(0);
     const [isActive, setIsActive] = useState(false);
-
+    const {user} = useAuth();
+    const { requestDelete } = useDelete();
+    const nav = useNavigate();
     const handleLikeBtn = () => {
         if(isActive){
             
@@ -14,8 +20,26 @@ const ReviewCard = ({ review }) => {
             setLikeCount(likeCount + 1);
             setIsActive(true);
         }
-        
     };
+
+    const handleEditReview = () => {
+        // review 객체 전체를 다음 페이지로 넘깁니다.
+        nav(`/reviewwrite/${review.movieId}?reviewId=${review.id}`, {
+            state: {
+                review: review,
+                isEdit: true
+            }
+        });
+    };
+
+    const handleDeleteReview = ()=>{
+        requestDelete(`/api/review/delete/${review.id}`, "리뷰",
+            () => nav(0));
+
+    }
+
+    const isAuthorized = user && user.id===review.userId;
+    const canReport = user && user.id !== review.userId;
 
     return (
         <li className="ReviewCard">
@@ -38,6 +62,37 @@ const ReviewCard = ({ review }) => {
                         </span>
                     ))}
                 </div>
+                {user && (
+                    <div className="edit-img">
+                        {isAuthorized && (
+                            <>
+                                <button
+                                    type="button"
+                                    className="update-btn"
+                                    onClick={handleEditReview}
+                                >
+                                    <img src="/img/pencil.png" alt="update-review" />
+                                </button>
+                                <button
+                                    type="button"
+                                    className="delete-btn"
+                                    onClick={handleDeleteReview}
+                                >
+                                    <img src="/img/trashcan.png" alt="delete-review" />
+                                </button>
+                            </>
+                        )}
+                        {canReport && (
+                            <button
+                                type="button"
+                                className="report-btn"
+                                aria-label="리뷰 신고"
+                            >
+                                <img src="/img/siren.png" alt="report-review" />
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
             <div className="card-mid">
                 <div className="info-viewingdate">

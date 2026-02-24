@@ -24,7 +24,7 @@
 }
 
 /* 프로필 이미지 (사진의 검은 사람 아이콘) */
-.ReviewCard .profile-img {
+.ReviewCard .profile-img, .report-img  {
   width: 40px; /* 아이콘 너비 */
   height: 40px; /* 아이콘 높이 */
   margin-right: 10px; /* 오른쪽 여백 */
@@ -54,6 +54,23 @@
 .ReviewCard .card-stars span {
     display: inline-block;
     padding-right: 2px; /* 별과 별 사이의 여백 */
+}
+.ReviewCard .edit-img{
+  display: flex;
+}
+
+.ReviewCard .edit-img button{
+  background: none;
+  border: none;
+  padding: 0;
+  margin-right: 10px;
+  cursor: pointer;
+  outline: none;
+}
+.ReviewCard .edit-img button img{
+  width: 30px;
+  height: 30px;
+  display: block;
 }
 
 /* 카드 중간 부분 (관람일, 함께 간 사람) */

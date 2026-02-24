@@ -3,6 +3,8 @@ import {useEffect, useState} from 'react';
 import './MyPage.css';
 import axios from "axios";
 import baseApi from "../../../public/data/api/api.js";
+import {useDelete} from "../../hooks/UseDelete.js";
+import {useNavigate} from "react-router-dom";
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('info');
@@ -10,6 +12,8 @@ const MyPage = () => {
   const [reviews,setReviews] = useState([]);
   const [wishlists,setWishlists] = useState("");
   const [inquiries,setInquiries] = useState([]);
+  const {requestDelete} = useDelete();
+  const nav = useNavigate();
 
   // 데이터 샘플 (실제로는 API에서 가져오겠지?)
   const data = {
@@ -68,6 +72,17 @@ const MyPage = () => {
       console.error("데이터 가져오기 실패:", e);    }
   }
 
+  const handleDelete = (id)=>{
+    const targetNames = {
+      review: "리뷰",
+      inquiry: "문의",
+      wishlist: "찜 항목"
+    };
+    requestDelete(`/api/${activeTab}/delete/${id}`, `${targetNames[activeTab]}`,
+        () => nav(0));
+
+  }
+
   if (!user) {
     return <div className="loading">로딩 중...</div>;
   }
@@ -94,12 +109,55 @@ const MyPage = () => {
           <section>
             <h3 className="content-title">👤 내 정보</h3>
             <div className="info-card">
-              <p><strong>사용자명:</strong>{user.name}</p>
-              <p><strong>이메일:</strong>{user.email}</p>
-              <p><strong>닉네임:</strong>{user.nickName}</p>
-              <p><strong>성별:</strong>{user.gender==="MALE" ? "남" : "여"}</p>
-              <p><strong>생일:</strong>{user.birthDate}</p>
-              <p><strong>가입일:</strong>{user.regTime}</p>
+              {/*<p><strong>사용자명:</strong>{user.name}</p>*/}
+              {/*<p><strong>이메일:</strong>{user.email}</p>*/}
+              {/*<p><strong>닉네임:</strong>{user.nickName}</p>*/}
+              {/*<p><strong>성별:</strong>{user.gender==="MALE" ? "남" : "여"}</p>*/}
+              {/*<p><strong>생일:</strong>{user.birthDate}</p>*/}
+              {/*<p><strong>가입일:</strong>{user.regTime}</p>*/}
+              <div className="info-row">
+                <div className="info-left">
+                  <p><strong>사용자명 : </strong>{user.name}</p>
+                </div>
+                <button className="edit-btn">수정</button>
+              </div>
+              <div className="info-row">
+                <div className="info-left">
+                  <p><strong>이메일 : </strong>{user.email}</p>
+                </div>
+                <button className="edit-btn">수정</button>
+              </div>
+              <div className="info-row">
+                <div className="info-left">
+                  <p><strong>닉네임 : </strong>{user.nickName}</p>
+                </div>
+                <button className="edit-btn">수정</button>
+              </div>
+              <div className="info-row">
+                <div className="info-left">
+                  <p><strong>성별 : </strong>{user.gender==="MALE" ? "남" : "여"}</p>
+                </div>
+                <button className="edit-btn">수정</button>
+              </div>
+              <div className="info-row">
+                <div className="info-left">
+                  <p><strong>생일 : </strong>{user.birthDate}</p>
+                </div>
+                <button className="edit-btn">수정</button>
+              </div>
+              <div className="info-row">
+                <div className="info-left">
+                  <p><strong>가입일 : </strong>{user.regTime}</p>
+                </div>
+                <button className="edit-btn">수정</button>
+              </div>
+              <div className="info-row no-border">
+                <div className="info-left">
+                  <span className="icon">👤</span>
+                  <span className="info-text">회원탈퇴</span>
+                </div>
+                <button className="edit-btn exit-btn">탈퇴하기</button>
+              </div>
             </div>
           </section>
         )}
@@ -109,12 +167,18 @@ const MyPage = () => {
             <h3 className="content-title">✍️ 내가 쓴 리뷰</h3>
             {reviews.map((r,index) => (
               <div key={r.id} className="info-card review-item">
-                <h4>
-                  <span className="review-number">{index + 1}. </span>
-                  {r.title}
-                  <span className="rating">★ {r.star}</span>
-                </h4>
-                <p>{r.content}</p>
+                <div>
+                  <h4>
+                    <span className="review-number">{index + 1}. </span>
+                    {r.title}
+                    <span className="rating">★ {r.star}</span>
+                  </h4>
+                  <p>{r.content}</p>
+                </div>
+                <div className="review-button">
+                  <button className="btn-update">수정</button>
+                  <button className="btn-delete" onClick={() => handleDelete(r.id)}>삭제</button>
+                </div>
               </div>
             ))}
           </section>
@@ -139,11 +203,15 @@ const MyPage = () => {
           <section>
             <h3 className="content-title">❓ 내 문의 현황</h3>
             {inquiries.map(q => (
-              <div key={q.id} className="info-card" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>{q.title} <small style={{ color: '#888' }}>({q.regTime})</small></span>
-                <span className={`status-badge ${q.process === 1 ? 'status-done' : 'status-wait'}`}>
+              <div key={q.id} className="info-card inquiry-item" >
+                <span>{q.title} <small>({q.regTime})</small></span>
+                <span>{q.content}</span>
+                <div className="manage-inquiry">
+                  <span className={`status-badge ${q.process === 1 ? 'status-done' : 'status-wait'}`}>
                   {q.process === 1 ? "처리됨" : "미처리"}
-                </span>
+                  </span>
+                  <button className="btn-delete" onClick={() => handleDelete(q.id)}>삭제</button>
+                </div>
               </div>
             ))}
           </section>

@@ -46,8 +46,12 @@ public class ReviewService {
     public void deleteReview(Long id,Long userId){
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다."));
-        if(!review.getUser().getId().equals(userId)){
-            throw new IllegalArgumentException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("해당 아이디의 유저가 없습니다."));
+
+
+        if (!user.canManage(review)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
         }
         reviewRepository.delete(review);
     }

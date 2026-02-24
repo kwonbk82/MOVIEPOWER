@@ -41,15 +41,16 @@ public class InquiryService {
         return inquiryMapper.entityToDtoList(inquiries);
     }
 
-    public void deleteInquiry(Long id){
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 아이디의 유저가 없습니다."));
+    public void deleteInquiry(Long id,Long userId){
         Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 문의가 없습니다."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("해당 아이디의 유저가 없습니다."));
 
-//        if (!user.canManage(inquiry)) {
-//            throw new IllegalArgumentException("권한이 없습니다.");
-//        }
+
+        if (!user.canManage(inquiry)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
 
         inquiryRepository.delete(inquiry);
 

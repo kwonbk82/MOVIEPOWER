@@ -3,18 +3,19 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import ReviewCard from './ReviewCard';
 import axios from 'axios';
 import './ReviewList.css';
+import {useAuth} from "../../../contexts/AuthContext.jsx";
 
 const ReviewList = ({movieId}) => {
     const reviewListRef = useRef(null);
     const [isReady, setIsReady] = useState(false);
     const [review, setReview] = useState([]);
-    const [sorted, setSorted] = useState('like');
+    const [sorted, setSorted] = useState('liked');
     const [visibleCount, setVisibleCount] = useState(6);
     const [isMore,setIsMore] = useState(false);
 
     useEffect(() => {
         fetchReview();
-    }, [review.id]);
+    }, []);
 
     const fetchReview = async () => {
         try {
@@ -32,7 +33,7 @@ const ReviewList = ({movieId}) => {
         const dateVal = (d) => (d ? new Date(d).getTime() : 0);
 
         if (sorted === 'liked') {
-            return arr.sort((a, b) => (b.like ?? 0) - (a.like ?? 0));
+            return arr.sort((a, b) => (b.liked ?? 0) - (a.liked ?? 0));
         }
         if (sorted === 'regTime') {
             return arr.sort(
@@ -50,14 +51,13 @@ const ReviewList = ({movieId}) => {
     );
 
     const handleMore = () => {
-        if(visibleCount>6){
-            setVisibleCount((c) => Math.min(c + 6, sortedReview.length));
+
+        if (visibleCount < sortedReview.length) {
             setIsMore(true);
-        }else {
-            setIsMore(false);
+            setVisibleCount((prev) => prev + 6);
         }
     };
-    const handeleFold = () => {
+    const handleFold = () => {
         setVisibleCount(6);
         if (reviewListRef.current) {
             reviewListRef.current.scrollIntoView({ behavior: 'auto' });
@@ -87,10 +87,10 @@ const ReviewList = ({movieId}) => {
                 ))}
             </ul>
             <div className="review-btn">
-                {isMore && <button className="more-btn" onClick={handleMore}>
+                {sortedReview.length >6 && <button className="more-btn" onClick={handleMore}>
                     더보기
                 </button>}
-                {isMore && <button className="fold-btn" onClick={handeleFold}>
+                {isMore && <button className="fold-btn" onClick={handleFold}>
                     접기
                 </button>}
             </div>

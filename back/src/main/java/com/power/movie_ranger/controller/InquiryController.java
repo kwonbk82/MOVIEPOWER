@@ -32,13 +32,13 @@ public class InquiryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> createInquiry(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<?> deleteInquiry(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                   @PathVariable Long id) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        inquiryService.deleteInquiry(id);
+        inquiryService.deleteInquiry(id, userDetails.getId());
         return ResponseEntity.ok(id);
     }
 

@@ -71,9 +71,85 @@
   border: 1px solid #333;
 }
 
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-row.no-border {
+  border-bottom: none;
+}
+
+.info-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 17px;
+}
+
+.info-text {
+  font-size: 16px;
+  color: red;
+}
+
+
+.edit-btn{
+  background: none;
+  border: 1px solid #ebebeb;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: #eeeeee;
+  cursor: pointer;
+  font-size: 13px;
+  background-color: #28a745;
+}
+.exit-btn{
+  background-color: red;
+}
+
+
+.review-item{
+  display: flex;
+  justify-content: space-between;
+}
+
 .review-item h4 {
   margin: 0 0 10px 0;
   color: #fff;
+}
+.review-button{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.review-button .btn-update {
+  background-color: #28a745;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.review-button .btn-update:hover {
+  background-color: #218838; /* 호버 시 진한 초록 */
+  transform: translateY(-1px); /* 살짝 위로 뜨는 효과 */
+}
+
+/* 삭제 버튼: 빨간색 */
+.btn-delete {
+  background-color: #dc3545;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  background-color: #c82333; /* 호버 시 진한 빨강 */
+  transform: translateY(-1px);
 }
 
 .rating {
@@ -85,6 +161,20 @@
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 0.8rem;
+}
+
+.inquiry-item{
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-card small{
+  color: #888;
+}
+
+.manage-inquiry{
+  display: flex;
+  gap: 10px;
 }
 
 .status-done { background-color: #2e7d32; }
