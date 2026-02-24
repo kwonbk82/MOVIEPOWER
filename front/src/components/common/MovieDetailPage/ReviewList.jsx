@@ -9,7 +9,7 @@ const ReviewList = ({movieId}) => {
     const reviewListRef = useRef(null);
     const [isReady, setIsReady] = useState(false);
     const [review, setReview] = useState([]);
-    const [sorted, setSorted] = useState('liked');
+    const [sorted, setSorted] = useState('regTime');
     const [visibleCount, setVisibleCount] = useState(6);
     const [isMore,setIsMore] = useState(false);
 

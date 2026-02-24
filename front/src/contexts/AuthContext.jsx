@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
             try {
                 // 1. 서버에 내 정보 요청
                 const res = await axios.get("/api/user/me", { withCredentials: true });
-                console.log(res.data);
                 // 2. 성공 시 유저 정보 저장
                 setUser(res.data);
             } catch (error) {

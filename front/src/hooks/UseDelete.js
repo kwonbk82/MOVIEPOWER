@@ -7,7 +7,8 @@ export const useDelete = () => {
         try {
             await axios.delete(url);
             alert(`${targetName} 삭제 완료!`);
-            if (onSuccess) onSuccess();
+            // if (onSuccess) onSuccess();
+            onSuccess?.();
         } catch (error) {
             console.error(error);
             alert("삭제에 실패했습니다.");
