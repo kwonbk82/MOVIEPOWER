@@ -46,6 +46,14 @@ public class UserController {
         return ResponseEntity.ok(userId);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id,
+                                            @AuthenticationPrincipal CustomUserDetails userDetails){
+
+        userService.deleteUser(id,userDetails.getId());
+        return ResponseEntity.ok(id);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto request
                                     , HttpServletRequest httpRequest){

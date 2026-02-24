@@ -70,7 +70,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:5173"));
         //허용할 요청 방식
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         //모든 헤더 정보를 신뢰하도록 설정
         config.setAllowedHeaders(List.of("*"));
         //세션과 쿠키를 주고받기 위해 설정

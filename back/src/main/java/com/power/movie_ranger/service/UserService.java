@@ -2,6 +2,7 @@ package com.power.movie_ranger.service;
 
 import com.power.movie_ranger.dto.UserJoinDto;
 import com.power.movie_ranger.dto.UserUpdateDto;
+import com.power.movie_ranger.entity.Review;
 import com.power.movie_ranger.entity.User;
 import com.power.movie_ranger.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,17 @@ public class UserService {
 
         user.updateUser(dto,passwordEncoder, loginId);
         return loginId;
+    }
+
+    public void deleteUser(Long id,Long userId){
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 아이디의 유저가 없습니다."));
+
+        if(!user.getId().equals(userId)){
+            throw new IllegalArgumentException("삭제 권한이 없습니다.");
+        }
+        userRepository.delete(user);
     }
 
 //    public User findByEmail(String email){
