@@ -55,6 +55,9 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Inquiry> inquiries = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Wishlist> wishlists = new ArrayList<>();
+
     public static User createUser(UserJoinDto dto, PasswordEncoder pe){
         User user = new User();
         user.name = dto.getName();

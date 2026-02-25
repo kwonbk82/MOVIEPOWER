@@ -50,7 +50,7 @@ public class Review extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"reviews", "password","inquiries"})
+    @JsonIgnoreProperties({"reviews", "password","inquiries","wishlists"})
     private User user;
 
     public static Review createReview(ReviewWriteDto dto,User user){

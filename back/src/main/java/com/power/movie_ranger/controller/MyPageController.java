@@ -4,11 +4,9 @@ import com.power.movie_ranger.config.security.CustomUserDetails;
 import com.power.movie_ranger.dto.InquiryShowDto;
 import com.power.movie_ranger.dto.ReviewShowDto;
 import com.power.movie_ranger.dto.UserInfoDto;
+import com.power.movie_ranger.dto.WishlistDto;
 import com.power.movie_ranger.entity.Review;
-import com.power.movie_ranger.service.InquiryService;
-import com.power.movie_ranger.service.MyPageService;
-import com.power.movie_ranger.service.ReviewService;
-import com.power.movie_ranger.service.UserService;
+import com.power.movie_ranger.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +25,7 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final ReviewService reviewService;
     private final InquiryService inquiryService;
+    private final WishlistService wishlistService;
 
     @GetMapping("/info")
     public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -64,5 +63,14 @@ public class MyPageController {
         List<InquiryShowDto> inquiries = inquiryService.showInquiry(userId);
 
         return ResponseEntity.ok(inquiries);
+    }
+
+    @GetMapping("/wishlist")
+    public ResponseEntity<?> getMyWishlists(@AuthenticationPrincipal CustomUserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        List<WishlistDto> wishlists = wishlistService.showWishlist(userDetails.getId());
+        return ResponseEntity.ok(wishlists);
     }
 }

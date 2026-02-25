@@ -1,11 +1,16 @@
 package com.power.movie_ranger.service;
 
 import com.power.movie_ranger.dto.UserInfoDto;
+import com.power.movie_ranger.dto.WishlistDto;
 import com.power.movie_ranger.entity.User;
+import com.power.movie_ranger.entity.Wishlist;
 import com.power.movie_ranger.repository.UserRepository;
+import com.power.movie_ranger.repository.WishlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,4 +32,5 @@ public class MyPageService {
                 .regTime(user.getRegTime())
                 .build();
     }
+
 }

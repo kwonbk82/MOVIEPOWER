@@ -9,6 +9,9 @@ import {
 import baseApi from '/public/data/api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import "./MovieDetailPage.css";
+import axios from "axios";
+import {useAuth} from "../../contexts/AuthContext.jsx";
+import {useDelete} from "../../hooks/UseDelete.js";
 
 const MovieDetailPage = () => {
     const nav = useNavigate();
@@ -19,7 +22,8 @@ const MovieDetailPage = () => {
     const [cast,setCast] = useState([]);
     const [crew,setCrew] = useState([]);
     const [likeBtn,setLikeBtn] = useState(false);
-
+    const [heart,setHeart] = useState(false);
+    const {user} = useAuth();
     useEffect(() => {
         fetchMovie();
     }, [id]);
@@ -34,9 +38,11 @@ const MovieDetailPage = () => {
             );
             const genreData = await res2.data.results;
             const res3 = await baseApi.get(`/movie/${id}/credits`);
-            
             const castData = await res3.data.cast;
             const crewData = await res3.data.crew;
+
+            const res4 = await axios.get(`/api/wishlist/check/${movie.id}`);
+            setHeart(res4.data);
             setMovie(data);
             setGenreMovie(genreData)
             setCast(castData)
@@ -56,8 +62,32 @@ const MovieDetailPage = () => {
     const handleClickGenre = ()=>{
         nav(`/movielist?genre=${movie.genres[0].id}&page=1`)
     }
-    const handleClickLike = ()=>{
-        setLikeBtn(!likeBtn)
+    const handleClickMovieLike = async ()=>{
+        try {
+            if (likeBtn){
+                await axios.delete("/api/wishlist/delete", {
+                    params: {targetId: movie.id, targetType: "MOVIE" }
+                });
+                setLikeBtn(false);
+                setHeart(false);
+            }else {
+                const res = await axios.post("/api/wishlist/create",{
+                    targetId: movie.id,
+                    targetType: "MOVIE"
+                })
+                if(res.status===200){
+                    setLikeBtn(true);
+                    setHeart(true);
+                }
+            }
+        }catch (e) {
+            console.error('찜 삭제 실패 :', e);
+            if (e.response?.status === 401) {
+                alert("로그인이 필요한 서비스입니다.");
+            } else {
+                alert("요청을 처리할 수 없습니다.");
+            }
+        }
     }
     const handleClickReviewBtn = ()=>{
         nav(`/reviewwrite/${movie.id}`)
@@ -81,7 +111,7 @@ const MovieDetailPage = () => {
                             <p>{movieScore}점</p>
                         </div>
                         <div className="left-btn">
-                            <button onClick={handleClickLike} className={`good-btn ${likeBtn ? 'active' : ''}`}>보고싶어요</button>
+                            <button onClick = {handleClickMovieLike}   className={`good-btn ${heart ? 'active' : ''}`}>보고싶어요</button>
                             <button onClick={handleClickReviewBtn} className='go-review-btn'>리뷰작성</button>
                         </div>
                     </div>

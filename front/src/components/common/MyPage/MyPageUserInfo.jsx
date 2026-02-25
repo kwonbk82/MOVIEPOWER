@@ -23,7 +23,8 @@ const MyPageUserInfo = ({user,logout}) => {
         };
         try {
             await axios.patch(`/api/user/update/${user.id}`,{[field]:tempValue});
-           alert(`${fieldNames[field]}이(가) 수정되었습니다.`);
+           alert(`${fieldNames[field]}이(가) 수정되었습니다. 
+                    수정된 정보는 다음 로그인부터 적용됩니다.`);
            setEditField(null);
            nav(0);
         }catch (e) {
