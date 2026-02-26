@@ -17,6 +17,41 @@
 #ActorInfo .actorInfo p {
   color: #fff;
 }
+#ActorInfo button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  /* 텍스트를 화면 밖으로 이동시켜서 숨깁니다. */
+  text-indent: -9999px;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+}
+
+#ActorInfo button:hover {
+  opacity: 0.8;
+  transform: scale(1.1); /* 약간 커지는 효과 */
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+#ActorInfo .good-btn {
+  background-image: url('/icon/heart.png');
+  background-size: cover; /* 이미지가 버튼을 꽉 채우도록 */
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: invert(100%);
+}
+
+#ActorInfo .good-btn.active {
+  background-image: url('/icon/heart_1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: none;
+}
+
 #ActorInfo .actorInfo .actorName {
   font-weight: 500;
   font-size: 32px;

@@ -11,7 +11,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import "./MovieDetailPage.css";
 import axios from "axios";
 import {useAuth} from "../../contexts/AuthContext.jsx";
-import {useDelete} from "../../hooks/UseDelete.js";
 
 const MovieDetailPage = () => {
     const nav = useNavigate();
@@ -22,14 +21,14 @@ const MovieDetailPage = () => {
     const [cast,setCast] = useState([]);
     const [crew,setCrew] = useState([]);
     const [likeBtn,setLikeBtn] = useState(false);
-    const [heart,setHeart] = useState(false);
-    const {user} = useAuth();
+
     useEffect(() => {
         fetchMovie();
     }, [id]);
 
     const fetchMovie = async () => {
         setIsReady(false);
+        setLikeBtn(false);
         try {
             const res1 = await baseApi.get(`/movie/${id}`);
             const data = await res1.data;
@@ -41,18 +40,23 @@ const MovieDetailPage = () => {
             const castData = await res3.data.cast;
             const crewData = await res3.data.crew;
 
-            const res4 = await axios.get(`/api/wishlist/check/${movie.id}`);
-            setHeart(res4.data);
             setMovie(data);
             setGenreMovie(genreData)
             setCast(castData)
             setCrew(crewData)
+
+            const wishlistRes = await axios.get(`/api/wishlist/${data.id}`,{
+                params : {targetType : 'MOVIE'}
+            });
+            setLikeBtn(!!wishlistRes.data);
         } catch (e) {
             console.error('데이터 로딩 실패 :', e);
         } finally {
             setIsReady(true);
         }
     };
+
+    // 이미 찜되어있는지 확인후 버튼상태 업데이트
     // 중복빼기
     const filteredGenreMovie = genreMovie.filter(item => item.id !== movie.id)
     
@@ -63,25 +67,21 @@ const MovieDetailPage = () => {
         nav(`/movielist?genre=${movie.genres[0].id}&page=1`)
     }
     const handleClickMovieLike = async ()=>{
-        try {
-            if (likeBtn){
-                await axios.delete("/api/wishlist/delete", {
-                    params: {targetId: movie.id, targetType: "MOVIE" }
-                });
-                setLikeBtn(false);
-                setHeart(false);
+        try{
+            const res = await axios.post("/api/wishlist/toggle",{
+                targetId :  movie.id,
+                targetType: "MOVIE"
+            });
+
+            if (res.data){
+                setLikeBtn(true);
             }else {
-                const res = await axios.post("/api/wishlist/create",{
-                    targetId: movie.id,
-                    targetType: "MOVIE"
-                })
-                if(res.status===200){
-                    setLikeBtn(true);
-                    setHeart(true);
-                }
+
+                setLikeBtn(false);
             }
+
         }catch (e) {
-            console.error('찜 삭제 실패 :', e);
+            console.error('찜 기능 동작 중 에러 :', e);
             if (e.response?.status === 401) {
                 alert("로그인이 필요한 서비스입니다.");
             } else {
@@ -111,7 +111,7 @@ const MovieDetailPage = () => {
                             <p>{movieScore}점</p>
                         </div>
                         <div className="left-btn">
-                            <button onClick = {handleClickMovieLike}   className={`good-btn ${heart ? 'active' : ''}`}>보고싶어요</button>
+                            <button onClick = {handleClickMovieLike} disabled={!isReady} className={`good-btn ${likeBtn ? 'active' : ''}`}>보고싶어요</button>
                             <button onClick={handleClickReviewBtn} className='go-review-btn'>리뷰작성</button>
                         </div>
                     </div>

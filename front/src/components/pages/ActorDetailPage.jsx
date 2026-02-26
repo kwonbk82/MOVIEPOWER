@@ -9,6 +9,7 @@ import {
   ActorCrewMovieList,
 } from "../common/ActorDetailPage";
 import "./ActorDetailPage.css";
+import axios from "axios";
 
 const DEPT_KO = {
   Acting: "배우",
@@ -32,13 +33,17 @@ const ActorDetailPage = () => {
   const [actor, setActor] = useState({});
   const [castMovies, setCastMovies] = useState([]);
   const [crewMovies, setCrewMovies] = useState([]);
+  const [likeBtn,setLikeBtn] = useState(false);
 
   const tDept = (dept) => (dept && DEPT_KO[dept]) || dept || "";
 
   useEffect(() => {
-    fahctData();
+    fetchData();
   }, [id]);
-  const fahctData = async () => {
+  const fetchData = async () => {
+    setIsLoding(false);
+    setLikeBtn(false);
+
     try {
       const res = await baseApi.get(`/person/${id}?language=ko-KR`);
       const data = res.data;
@@ -52,27 +57,32 @@ const ActorDetailPage = () => {
 
         setCastMovies(castMovieData);
 
-        const unqueCrewMoves = crewMovieData.filter((movie) => {
+        const uniqueCrewMoves = crewMovieData.filter((movie) => {
           if (!uniqueTitles.has(movie.title)) {
             uniqueTitles.add(movie.title);
             return true;
           }
           return false;
         });
-        setCrewMovies(unqueCrewMoves);
+        setCrewMovies(uniqueCrewMoves);
+
       } else {
         const crewMovieData = respones.data.crew;
         const uniqueTitles = new Set();
 
-        const unqueCrewMoves = crewMovieData.filter((movie) => {
+        const uniqueCrewMoves = crewMovieData.filter((movie) => {
           if (!uniqueTitles.has(movie.title)) {
             uniqueTitles.add(movie.title);
             return true;
           }
           return false;
         });
-        setCrewMovies(unqueCrewMoves);
+        setCrewMovies(uniqueCrewMoves);
       }
+      const wishlistRes = await axios.get(`/api/wishlist/${data.id}`,{
+        params : {targetType : 'PERSON'}
+      });
+      setLikeBtn(!!wishlistRes.data);
     } catch (e) {
       console.error("데이터 로딩 실패 : ", e);
     } finally {
@@ -83,7 +93,8 @@ const ActorDetailPage = () => {
   if (!isLoding) return <div>데이터 로딩중...</div>;
   return (
     <div id="ActorDetailPage">
-      <ActorInfo actor={actor} tDept={tDept} />
+      <ActorInfo actor={actor} tDept={tDept} isLoding={isLoding}
+                 likeBtn={likeBtn} setLikeBtn={setLikeBtn}/>
       <div className="actorWork">
         {castMovies.length && (
           <ActorMovieList actor={actor} movies={castMovies} />
