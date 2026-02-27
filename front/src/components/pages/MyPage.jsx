@@ -49,7 +49,7 @@ const MyPage = () => {
           }
 
           case 'wishlist':
-            setWishlists(res.data); // 찜 목록 저장
+            setWishlists(res.data);// 찜 목록 저장
             break;
 
           case 'inquiry':

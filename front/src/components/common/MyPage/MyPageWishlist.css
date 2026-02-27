@@ -1,0 +1,36 @@
+#MyPageWishlist .wishlist-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #333;
+    margin-bottom: 30px;
+}
+
+#MyPageWishlist .wishlist-title{
+    border-bottom : none;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+}
+
+#MyPageWishlist .movie-actor .page-btn {
+    display: flex;
+    gap: 20px;
+}
+#MyPageWishlist .movie-actor .page-btn button {
+    width: 60px;
+    height: 32px;
+    font-size: 28px;
+}
+#MyPageWishlist .movie-actor .page-btn .movie-btn, .actor-btn {
+    color: #606060;
+}
+
+#MyPageWishlist .movie-actor .page-btn .active {
+    color: #fff;
+}
+
+#MyPageWishlist .wishlist-card{
+    display: grid; /* 그리드 레이아웃을 사용합니다. */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 화면 크기에 따라 열의 개수가 자동으로 조절됩니다. */
+    gap: 30px;
+}

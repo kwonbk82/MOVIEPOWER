@@ -1,0 +1,32 @@
+
+#PersonItem {
+    text-align: center; /* 내용을 가운데 정렬합니다. */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out; /* 마우스를 올렸을 때 부드러운 효과를 줍니다. */
+    background-color: transparent;
+    border-radius: 10px;
+    overflow: hidden; /* 이미지가 밖으로 삐져나오지 않게 합니다. */
+}
+
+#PersonItem:hover {
+    transform: scale(1.05); /* 마우스를 올리면 살짝 커지게 합니다. */
+}
+
+#PersonItem .img {
+    width: 100%; /* 이미지가 부모 요소(카드)의 너비를 꽉 채우게 합니다. */
+    /* height: auto;  */
+    border-radius: 10px;
+}
+
+#PersonItem .name {
+    font-size: 1rem;
+    margin: 10px 0 5px; /* 위아래 여백을 줍니다. */
+    color: #fff;
+    white-space: nowrap; /* 제목이 줄 바꿈되지 않게 합니다. */
+    overflow: hidden; /* 넘치는 부분을 숨깁니다. */
+    text-overflow: ellipsis; /* 숨겨진 부분에 ...을 표시합니다. */
+    padding: 0 10px;
+    display: flex;
+    justify-content: center; /* 세로 방향으로 가운데 정렬합니다. */
+}
+
