@@ -18,39 +18,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class WishlistController {
     private final WishlistService wishlistService;
-    private final ReviewService reviewService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createWishlist(@AuthenticationPrincipal CustomUserDetails userDetails,
+    @PostMapping("/toggle")
+    public ResponseEntity<?> toggleWishlist(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                @Valid @RequestBody WishlistDto dto){
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        Long userId = wishlistService.createWishlist(dto, userDetails.getId());
+        boolean liked = wishlistService.toggleWishlist(dto, userDetails.getId());
 
-        return ResponseEntity.ok(userId);
+        return ResponseEntity.ok(liked);
     }
 
-    @GetMapping("/check/{targetId}")
-    public ResponseEntity<Boolean> checkWishlist(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                 @RequestParam Long targetId,
-                                                 @RequestParam TargetType targetType){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> isWishlistExists(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                @PathVariable("id") Long targetId,
+                                              @RequestParam("targetType") TargetType targetType){
         if (userDetails == null) {
             return ResponseEntity.ok(false);
         }
-        Boolean wishlist = wishlistService.isWishlist(userDetails.getId(), targetId,targetType);
-        return ResponseEntity.ok(wishlist);
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteWishlist(@RequestParam Long targetId,
-                                            @RequestParam TargetType targetType,
-                                            @AuthenticationPrincipal CustomUserDetails userDetails){
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-        }
-        wishlistService.deleteWishlist(userDetails.getId(),targetId,targetType);
-        return ResponseEntity.ok("찜 해제 성공");
+        boolean isExists = wishlistService.isWishlist(userDetails.getId(),targetId,targetType);
+        return ResponseEntity.ok(isExists);
     }
 }

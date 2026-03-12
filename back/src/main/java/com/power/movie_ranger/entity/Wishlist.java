@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Table(name="tb_wishlist",uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "targetId", "targetType"})})
+        @UniqueConstraint(columnNames = {"user_id", "targetId"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wishlist {
     @Id
