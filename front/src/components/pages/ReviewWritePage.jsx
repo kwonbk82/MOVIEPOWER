@@ -154,10 +154,6 @@ const ReviewWritePage = () => {
     if (!isReady) {
         return <div>데이터 로딩 중 ...</div>;
     }
-    if(!user){
-        alert("로그인 후 이용 가능합니다.");
-        nav(-1);
-    }
 
 
     return (

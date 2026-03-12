@@ -21,6 +21,7 @@ const MovieDetailPage = () => {
     const [cast,setCast] = useState([]);
     const [crew,setCrew] = useState([]);
     const [likeBtn,setLikeBtn] = useState(false);
+    const {user} = useAuth();
 
     useEffect(() => {
         fetchMovie();
@@ -90,7 +91,11 @@ const MovieDetailPage = () => {
         }
     }
     const handleClickReviewBtn = ()=>{
-        nav(`/reviewwrite/${movie.id}`)
+        if(user){
+            nav(`/reviewwrite/${movie.id}`)
+        }else{
+            alert("로그인이 필요한 서비스입니다.");
+        }
     }
     let movieScore = Math.round(movie.vote_average * 100) / 100;
     if (!isReady) {
