@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -31,7 +33,10 @@ public class Review extends BaseEntity{
     private Integer star;
 
     @Column(nullable = false)
-    private Integer liked;
+    private int liked = 0;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewLike> reviewLikes = new ArrayList<>();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -74,19 +79,39 @@ public class Review extends BaseEntity{
             throw new IllegalArgumentException("수정 권한이 없습니다.");
         }
 
-        // 기존 내용과 새로 들어온 내용이 다를 때만 '수정됨' 처리
+        // 1. content 변경 체크
         if (!Objects.equals(this.content, dto.getContent())) {
             this.content = dto.getContent();
             this.isModified = true;
         }
 
-        if (dto.getStar() != null) this.star = dto.getStar();
-        if (dto.getDate() != null) this.date = dto.getDate();
-        if (dto.getAccompany() != null) this.accompany=dto.getAccompany();
+// 2. star 변경 체크 (null이 아닐 때만 업데이트한다고 하셨으니 조건 추가)
+        if (dto.getStar() != null && !Objects.equals(this.star, dto.getStar())) {
+            this.star = dto.getStar();
+            this.isModified = true;
+        }
+
+// 3. date 변경 체크
+        if (dto.getDate() != null && !Objects.equals(this.date, dto.getDate())) {
+            this.date = dto.getDate();
+            this.isModified = true;
+        }
+
+// 4. accompany 변경 체크
+        if (dto.getAccompany() != null && !Objects.equals(this.accompany, dto.getAccompany())) {
+            this.accompany = dto.getAccompany();
+            this.isModified = true;
+        }
     }
 
-    public void increaseLikedCount(){
+    public void increaseLikedCount(ReviewLike reviewLike){
+        this.reviewLikes.add(reviewLike);
         this.liked += 1;
+    }
+
+    public void decreaseLikedCount(ReviewLike reviewLike){
+        this.reviewLikes.remove(reviewLike);
+        this.liked -= 1;
     }
 
 }

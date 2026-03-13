@@ -6,19 +6,32 @@ import {useDelete} from "../../../hooks/UseDelete.js";
 import axios from "axios";
 
 const ReviewCard = ({ review }) => {
-    const [likeCount, setLikeCount] = useState(0);
+    const [likeCount,setLikeCount] = useState(review.liked);
     const [isActive, setIsActive] = useState(false);
     const {user} = useAuth();
     const { requestDelete } = useDelete();
     const nav = useNavigate();
-    const handleLikeBtn = () => {
-        if(isActive){
-            
-            setLikeCount(likeCount - 1);
-            setIsActive(false);
-        }else{
-            setLikeCount(likeCount + 1);
-            setIsActive(true);
+
+    const accompanyMap = {
+        SOLO : "단독",
+        COUPLE : "연인",
+        FAMILY : "가족",
+        FRIEND : "친구",
+        GROUP : "단체"
+    }
+
+    const handleLikeBtn = async () => {
+        try {
+            const res = await axios.patch(`/api/review/${review.id}/liked`);
+            setLikeCount(res.data);
+            setIsActive(!isActive);
+        }catch (e) {
+            console.error('리뷰 추천 동작 중 에러 :', e);
+            if (e.response?.status === 401) {
+                alert("로그인이 필요한 서비스입니다.");
+            } else {
+                alert("요청을 처리할 수 없습니다.");
+            }
         }
     };
 
@@ -49,6 +62,7 @@ const ReviewCard = ({ review }) => {
                         <img src={review.profile ?`${review.profile}`:"/img/no_user_profile.jpg"} alt={review.nickName} />
                     </p>
                     <p className="info-nick">{review.nickName}</p>
+                    <p className="info-modified">{review.modified ? "(수정됨)" : ""}</p>
                 </div>
                 <div className="card-stars">
                     {Array.from({ length: review.star }).map((_, index) => (
@@ -101,7 +115,7 @@ const ReviewCard = ({ review }) => {
                 </div>
                 <div className="info-accompany">
                     <p>동행</p>
-                    <p>{review.accompany}</p>
+                    <p>{accompanyMap[review.accompany] || "정보 없음"}</p>
                 </div>
             </div>
             <div className="card-content">{review.content}</div>
@@ -112,7 +126,7 @@ const ReviewCard = ({ review }) => {
                 >
                     좋아요
                 </button>
-                <p>{review.liked+likeCount}</p>
+                <p>{likeCount}</p>
             </div>
         </li>
     );

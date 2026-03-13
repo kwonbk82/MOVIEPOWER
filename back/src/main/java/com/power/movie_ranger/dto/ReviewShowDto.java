@@ -1,6 +1,7 @@
 package com.power.movie_ranger.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.power.movie_ranger.constant.Accompany;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +23,5 @@ public class ReviewShowDto {
     private String nickName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime regTime;
+    private boolean isModified;
 }

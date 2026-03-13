@@ -25,4 +25,6 @@ public class ReviewUpdateDto {
 
     @NotBlank
     private String content;
+
+    private boolean isModified;
 }

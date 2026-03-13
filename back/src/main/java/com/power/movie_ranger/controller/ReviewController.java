@@ -64,8 +64,12 @@ public class ReviewController {
     }
 
     @PatchMapping("/{id}/liked")
-    public ResponseEntity<Void> increaseLikedCount(@PathVariable("id") @Min(1) Long id){
-        reviewService.increaseLikedCount(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> handleReviewLiked(@PathVariable Long id
+                                                ,@AuthenticationPrincipal CustomUserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        int updatedLikeCount = reviewService.handleLikedCount(id, userDetails.getId());
+        return ResponseEntity.ok(updatedLikeCount);
     }
 }
