@@ -121,7 +121,7 @@ const Header = () => {
             <>
               <span className="user-name">{user.nickName}님</span>
               <button onClick={handleLogout}>로그아웃</button>
-              {user.role === "ADMIN" ? <Link to="/admin">관리자페이지</Link>
+              {user.role[0] === "ADMIN" ? <Link to="/admin">관리자페이지</Link>
                                     : <Link to="/mypage">마이페이지</Link>}
             </>
         ) : (

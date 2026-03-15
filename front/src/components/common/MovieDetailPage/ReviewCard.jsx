@@ -7,7 +7,9 @@ import axios from "axios";
 
 const ReviewCard = ({ review }) => {
     const [likeCount,setLikeCount] = useState(review.liked);
-    const [isActive, setIsActive] = useState(false);
+    const [isLikeActive, setIsLikeActive] = useState(false);
+    const [reportCount,setReportCount] = useState(review.report);
+    const [isReportActive, setIsReportActive] = useState(false);
     const {user} = useAuth();
     const { requestDelete } = useDelete();
     const nav = useNavigate();
@@ -24,9 +26,24 @@ const ReviewCard = ({ review }) => {
         try {
             const res = await axios.patch(`/api/review/${review.id}/liked`);
             setLikeCount(res.data);
-            setIsActive(!isActive);
+            setIsLikeActive(!isLikeActive);
         }catch (e) {
             console.error('리뷰 추천 동작 중 에러 :', e);
+            if (e.response?.status === 401) {
+                alert("로그인이 필요한 서비스입니다.");
+            } else {
+                alert("요청을 처리할 수 없습니다.");
+            }
+        }
+    };
+
+    const handleReportBtn = async () => {
+        try {
+            const res = await axios.patch(`/api/review/${review.id}/reported`);
+            setReportCount(res.data);
+            setIsReportActive(!isReportActive);
+        }catch (e) {
+            console.error('신고 버튼 동작 중 에러 :', e);
             if (e.response?.status === 401) {
                 alert("로그인이 필요한 서비스입니다.");
             } else {
@@ -121,7 +138,7 @@ const ReviewCard = ({ review }) => {
             <div className="card-content">{review.content}</div>
             <div className="card-like">
                 <button
-                    className={`like-button ${isActive ? 'active' : ''}`}
+                    className={`like-button ${isLikeActive ? 'active' : ''}`}
                     onClick={handleLikeBtn}
                 >
                     좋아요

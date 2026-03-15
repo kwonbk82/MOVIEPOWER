@@ -66,7 +66,7 @@ public class User extends BaseTimeEntity{
         user.nickName = dto.getNickName();
         user.gender = dto.getGender();
         user.birthDate = dto.getBirthDate();
-        if ("admin@movie.com".equals(dto.getEmail())) {
+        if ("admin@co.kr".equals(dto.getEmail())) {
             user.role = Role.ADMIN;
         } else {
             user.role = Role.USER;

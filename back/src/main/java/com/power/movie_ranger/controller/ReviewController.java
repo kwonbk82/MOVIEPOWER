@@ -72,4 +72,14 @@ public class ReviewController {
         int updatedLikeCount = reviewService.handleLikedCount(id, userDetails.getId());
         return ResponseEntity.ok(updatedLikeCount);
     }
+
+    @PatchMapping("/{id}/reported")
+    public ResponseEntity<?> handleReviewReported(@PathVariable Long id
+            ,@AuthenticationPrincipal CustomUserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        int updatedReportCount = reviewService.handleReportedCount(id, userDetails.getId());
+        return ResponseEntity.ok(updatedReportCount);
+    }
 }

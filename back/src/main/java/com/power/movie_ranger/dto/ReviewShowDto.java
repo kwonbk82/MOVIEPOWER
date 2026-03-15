@@ -21,6 +21,7 @@ public class ReviewShowDto {
     private String content;
     private Long userId;
     private String nickName;
+    private Integer report;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime regTime;
     private boolean isModified;

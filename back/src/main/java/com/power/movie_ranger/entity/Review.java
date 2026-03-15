@@ -51,6 +51,9 @@ public class Review extends BaseEntity{
     @Column(nullable = false)
     private Integer report;
 
+    @OneToMany(mappedBy = "review",cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<ReviewReport> reviewReports = new ArrayList<>();
+
     private boolean isModified = false;
 
     @ManyToOne
@@ -112,6 +115,15 @@ public class Review extends BaseEntity{
     public void decreaseLikedCount(ReviewLike reviewLike){
         this.reviewLikes.remove(reviewLike);
         this.liked -= 1;
+    }
+
+    public void increaseReportCount(ReviewReport reviewReport){
+        this.reviewReports.add(reviewReport);
+        this.report +=1;
+    }
+    public void decreaseReportCount(ReviewReport reviewReport){
+        this.reviewReports.remove(reviewReport);
+        this.report -=1;
     }
 
 }
