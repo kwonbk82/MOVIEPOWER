@@ -39,6 +39,11 @@ const ReviewCard = ({ review }) => {
 
     const handleReportBtn = async () => {
         try {
+            if(!isReportActive){
+                alert("정말 이 리뷰를 신고하시겠습니까?");
+            }else {
+                alert("이 리뷰에 대한 신고를 취소할까요?");
+            }
             const res = await axios.patch(`/api/review/${review.id}/reported`);
             setReportCount(res.data);
             setIsReportActive(!isReportActive);
@@ -118,8 +123,10 @@ const ReviewCard = ({ review }) => {
                                 type="button"
                                 className="report-btn"
                                 aria-label="리뷰 신고"
+                                onClick={handleReportBtn}
+
                             >
-                                <img src="/img/siren.png" alt="report-review" />
+                                <img src={isReportActive ? "/img/sirenActived.png" : "/img/siren.png"} alt="report-review" />
                             </button>
                         )}
                     </div>
