@@ -1,10 +1,7 @@
 package com.power.movie_ranger.controller;
 
 import com.power.movie_ranger.config.security.CustomUserDetails;
-import com.power.movie_ranger.dto.ReviewShowDto;
-import com.power.movie_ranger.dto.ReviewUpdateDto;
-import com.power.movie_ranger.dto.ReviewWriteDto;
-import com.power.movie_ranger.dto.UserInfoDto;
+import com.power.movie_ranger.dto.*;
 import com.power.movie_ranger.service.ReviewService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -81,5 +78,15 @@ public class ReviewController {
         }
         int updatedReportCount = reviewService.handleReportedCount(id, userDetails.getId());
         return ResponseEntity.ok(updatedReportCount);
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<?> getReviewToggleStatus(@PathVariable Long id
+                                                    ,@AuthenticationPrincipal CustomUserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        ReviewToggleStatusDto dto = reviewService.getReviewToggleStatus(userDetails.getId(), id);
+        return ResponseEntity.ok(dto);
     }
 }

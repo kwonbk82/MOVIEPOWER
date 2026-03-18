@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import './ReviewCard.css';
 import {useAuth} from "../../../contexts/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
@@ -8,7 +8,6 @@ import axios from "axios";
 const ReviewCard = ({ review }) => {
     const [likeCount,setLikeCount] = useState(review.liked);
     const [isLikeActive, setIsLikeActive] = useState(false);
-    const [reportCount,setReportCount] = useState(review.report);
     const [isReportActive, setIsReportActive] = useState(false);
     const {user} = useAuth();
     const { requestDelete } = useDelete();
@@ -20,6 +19,31 @@ const ReviewCard = ({ review }) => {
         FAMILY : "가족",
         FRIEND : "친구",
         GROUP : "단체"
+    }
+    useEffect(() => {
+        if(user) {
+            fetchReviewToggleStatus();
+        }
+    }, []);
+
+    const fetchReviewToggleStatus = async ()=>{
+        try {
+            const res = await axios.get(`/api/review/${review.id}/status`);
+
+            if(res.data.isLiked){
+                setIsLikeActive(true);
+            }else {
+                setIsLikeActive(false);
+            }
+
+            if(res.data.isReported){
+                setIsReportActive(true);
+            }else {
+                setIsReportActive(false);
+            }
+        }catch (e) {
+            console.error('리뷰 추천,신고 여부 로딩 실패 :', e);
+        }
     }
 
     const handleLikeBtn = async () => {
@@ -45,7 +69,6 @@ const ReviewCard = ({ review }) => {
                 alert("이 리뷰에 대한 신고를 취소할까요?");
             }
             const res = await axios.patch(`/api/review/${review.id}/reported`);
-            setReportCount(res.data);
             setIsReportActive(!isReportActive);
         }catch (e) {
             console.error('신고 버튼 동작 중 에러 :', e);

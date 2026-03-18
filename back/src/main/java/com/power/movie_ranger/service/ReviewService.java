@@ -1,6 +1,7 @@
 package com.power.movie_ranger.service;
 
 import com.power.movie_ranger.dto.ReviewShowDto;
+import com.power.movie_ranger.dto.ReviewToggleStatusDto;
 import com.power.movie_ranger.dto.ReviewUpdateDto;
 import com.power.movie_ranger.dto.ReviewWriteDto;
 import com.power.movie_ranger.entity.Review;
@@ -110,6 +111,13 @@ public class ReviewService {
         }
 
         return review.getReport();
+    }
+
+    public ReviewToggleStatusDto getReviewToggleStatus(Long userId, Long reviewId){
+        boolean isLiked = reviewLikeRepository.existsByUserIdAndReviewId(userId, reviewId);
+        boolean isReported = reviewReportRepository.existsByUserIdAndReviewId(userId, reviewId);
+
+        return new ReviewToggleStatusDto(isLiked,isReported);
     }
 
 
