@@ -37,4 +37,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", e.getMessage()));
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity handleAllException(Exception e){
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("message","작업을 처리하는 도중 에러가 발생했습니다."));
+    }
 }

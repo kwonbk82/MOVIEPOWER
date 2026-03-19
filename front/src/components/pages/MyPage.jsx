@@ -6,7 +6,7 @@ import baseApi from "../../../public/data/api/api.js";
 import {useDelete} from "../../hooks/UseDelete.js";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext.jsx";
-import {MyPageInquiry, MyPageReview, MyPageUserInfo, MyPageWishlist} from "../common/MyPage/index.js";
+import {MyPageInquiry, MyPageReview, MyPageUserInfo, MyPageWishlist, MyProfile} from "../common/MyPage/index.js";
 
 
 const MyPage = () => {
@@ -91,6 +91,7 @@ const MyPage = () => {
     <div className="mypage-container">
       {/* 사이드바 */}
       <nav className="sidebar">
+        <MyProfile/>
         <ul>
           <li className={`menu-item ${activeTab === 'info' ? 'active' : ''}`}
               onClick={() => setActiveTab('info')}>내 정보</li>

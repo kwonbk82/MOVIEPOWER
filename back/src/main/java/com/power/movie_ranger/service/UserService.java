@@ -2,13 +2,16 @@ package com.power.movie_ranger.service;
 
 import com.power.movie_ranger.dto.UserJoinDto;
 import com.power.movie_ranger.dto.UserUpdateDto;
-import com.power.movie_ranger.entity.Review;
 import com.power.movie_ranger.entity.User;
 import com.power.movie_ranger.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -18,6 +21,13 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileService fileService;
+
+    @Value("${file.upload.baseLocation}") // C:/shop/
+    private String baseLocation;
+
+    @Value("${file.upload.profileDir}") // event
+    private String profileDir;
 
     public Long join(UserJoinDto dto){
         checkUser(dto);
@@ -75,5 +85,27 @@ public class UserService {
         if (dto.getBirthDate() == null) {
             throw new IllegalStateException("생년월일을 입력해주세요.");
         }
+    }
+
+    public void updateUserProfile(Long userId, MultipartFile file) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("유저 없음"));
+
+        String fullPath = baseLocation + profileDir + "/";
+        // 1. 기존 사진이 있다면 삭제 (서버 용량 관리)
+        if (user.getProfileImg() != null) {
+            String oldFilePath = fullPath + "/" + user.getProfileImg();
+            fileService.deleteFile(oldFilePath);
+        }
+
+        // 2. 새 파일 업로드
+        String savedFileName = fileService.uploadFile(
+                fullPath,
+                file.getOriginalFilename(),
+                file.getBytes()
+        );
+
+        // 3. DB에는 파일명만 업데이트
+        user.updateProfileImg(savedFileName);
     }
 }

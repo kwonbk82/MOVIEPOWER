@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -131,5 +132,16 @@ public class UserController {
     public ResponseEntity<Boolean> checkNickName(@RequestParam("nickName") String nickName){
         boolean isDuplicate = userService.checkNickName(nickName);
         return ResponseEntity.ok(isDuplicate);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<String> updateProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                MultipartFile file) throws Exception{
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        userService.updateUserProfile(userDetails.getId(), file);
+        return ResponseEntity.ok("프로필 사진이 성공적으로 변경되었습니다.");
     }
 }

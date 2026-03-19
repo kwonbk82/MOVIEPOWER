@@ -37,3 +37,13 @@ spring:
     servlet:
       session:
         timeout: 30m
+
+file:
+  upload:
+    # 최상위 루트 경로 (저장용)
+    baseLocation: C:/movie/
+    # 최상위 루트 경로 (WebMvcConfig 설정용)
+    baseResourceLocation: file:///C:/movie/
+
+    # 각 카테고리별 하위 폴더명
+    profileDir: profile

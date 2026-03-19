@@ -20,7 +20,7 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
 
-    @GetMapping("/review/reported")
+    @GetMapping("/review")
     public ResponseEntity<?> showMovieReviews(@RequestParam("report") Integer report){
 
         List<ReviewShowDto> reviews = adminService.showReportedReview(report);

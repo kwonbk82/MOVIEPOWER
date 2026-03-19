@@ -49,6 +49,9 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false,length = 10)
     private Role role;
 
+    @Column(nullable = true)
+    private String profileImg;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
@@ -86,6 +89,10 @@ public class User extends BaseTimeEntity{
         if (dto.getNickName() != null) this.nickName = dto.getNickName();
         if (dto.getGender() != null) this.gender = dto.getGender();
         if (dto.getBirthDate() != null) this.birthDate = dto.getBirthDate();
+    }
+
+    public void updateProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 
     public boolean canManage(Review review) {
