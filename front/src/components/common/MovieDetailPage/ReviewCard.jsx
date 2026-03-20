@@ -4,6 +4,7 @@ import {useAuth} from "../../../contexts/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import {useDelete} from "../../../hooks/UseDelete.js";
 import axios from "axios";
+import {IMAGE_CONFIG} from "../../../constants/images.js";
 
 const ReviewCard = ({ review }) => {
     const [likeCount,setLikeCount] = useState(review.liked);
@@ -20,6 +21,9 @@ const ReviewCard = ({ review }) => {
         FRIEND : "친구",
         GROUP : "단체"
     }
+    const userProfile = review.profileImg ? IMAGE_CONFIG.PROFILE.BASE_URL+review.profileImg
+                                                : IMAGE_CONFIG.PROFILE.DEFAULT
+
     useEffect(() => {
         if(user) {
             fetchReviewToggleStatus();
@@ -104,7 +108,7 @@ const ReviewCard = ({ review }) => {
             <div className="card-top">
                 <div className="card-profile">
                     <p className="profile-img">
-                        <img src={review.profile ?`${review.profile}`:"/img/no_user_profile.jpg"} alt={review.nickName} />
+                        <img src={userProfile} alt={review.nickName} />
                     </p>
                     <p className="info-nick">{review.nickName}</p>
                     <p className="info-modified">{review.modified ? "(수정됨)" : ""}</p>

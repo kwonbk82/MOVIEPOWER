@@ -14,6 +14,7 @@ public interface ReviewMapper {
     // 필드명이 다른 경우만 @Mapping으로 지정해줍니다.
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "nickName", source = "user.nickName")
+    @Mapping(target = "profileImg", source = "user.profileImg")
     @Mapping(source = "modified", target = "modified")
     ReviewShowDto entityToDto(Review review);
 

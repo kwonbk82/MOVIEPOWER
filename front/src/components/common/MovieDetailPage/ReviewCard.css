@@ -23,17 +23,19 @@
   align-items: center;
 }
 
-/* 프로필 이미지 (사진의 검은 사람 아이콘) */
+/* 프로필 이미지 */
 .ReviewCard .profile-img, .report-img  {
   width: 40px; /* 아이콘 너비 */
   height: 40px; /* 아이콘 높이 */
   margin-right: 10px; /* 오른쪽 여백 */
-  /* SVG 아이콘 추가. 실제로는 SVG 파일을 사용하거나 React Icons 같은 라이브러리를 쓰는 게 좋아요. */
+  /*flex-shrink: 0;*/
 }
 .ReviewCard .profile-img img{
   width: 100%;
-  height: auto;
-  border-radius: 50%; /* 원 모양으로 만듦 */
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* 닉네임 */
