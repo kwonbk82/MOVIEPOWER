@@ -1,5 +1,6 @@
 import {createContext, useContext, useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
+import {IMAGE_CONFIG} from "../constants/images.js";
 
 const AuthContext = createContext(null);
 
@@ -7,12 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [user,setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const IMAGE_BASE_URL = "http://localhost:8080/img/profile/";
-    const DEFAULT_IMAGE = "/img/no_user_profile.jpg";
-
     // 1. 새로고침 시 로그인 확인
-
-
     const refreshUser = useCallback(async () => {
         try {
             // 1. 서버에 내 정보 요청
@@ -22,8 +18,8 @@ export const AuthProvider = ({ children }) => {
             const processedUser = {
                 ...userData,
                 profileUrl: userData.profileImg
-                    ? `${IMAGE_BASE_URL}${userData.profileImg}`
-                    : DEFAULT_IMAGE
+                    ? `${IMAGE_CONFIG.PROFILE.BASE_URL}${userData.profileImg}`
+                    : IMAGE_CONFIG.PROFILE.DEFAULT
             };
             // 2. 성공 시 유저 정보 저장
             setUser(processedUser);

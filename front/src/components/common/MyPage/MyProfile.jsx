@@ -2,15 +2,17 @@ import './MyProfile.css';
 import {useRef, useState} from "react";
 import axios from "axios";
 import {useAuth} from "../../../contexts/AuthContext.jsx";
+import {IMAGE_CONFIG} from "../../../constants/images.js";
+
 
 const MyProfile = () => {
-    const defaultProfileImg = "/img/no_user_profile.jpg";
+
     const {user,refreshUser} = useAuth();
 
     const [previewState,setPreviewState] = useState(user?.profileUrl);
     const [uploadFile, setUploadFile] = useState(null);
     const fileInputRef = useRef(null);
-    console.log(user);
+
     const handleFileChange = (e)=>{
         const file = e.target.files[0];
         if (file) {
@@ -21,7 +23,7 @@ const MyProfile = () => {
 
     const handleDeleteClick = ()=>{
         setUploadFile(null);
-        setPreviewState(defaultProfileImg);
+        setPreviewState(IMAGE_CONFIG.PROFILE.DEFAULT);
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -56,7 +58,7 @@ const MyProfile = () => {
                     <span>변경</span>
                 </label>
             </div>
-            {previewState !== defaultProfileImg && (
+            {previewState !== IMAGE_CONFIG.PROFILE.DEFAULT && (
                 <button onClick={handleDeleteClick} className="profile-delete-btn" title="사진 삭제">
                     <img src="/img/trashcan.png" alt="삭제" />
                 </button>
