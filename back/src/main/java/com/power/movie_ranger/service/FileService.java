@@ -43,7 +43,6 @@ public class FileService {
 
         if (deleteFile.exists()) {
             deleteFile.delete();
-            System.out.println("파일 삭제 완료");
         } else {
             System.out.println("파일이 존재하지 않음");
         }

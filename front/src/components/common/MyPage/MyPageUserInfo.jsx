@@ -2,11 +2,13 @@ import {useNavigate} from "react-router-dom";
 import {useDelete} from "../../../hooks/UseDelete.js";
 import {useState} from "react";
 import axios from "axios";
+import {useAuth} from "../../../contexts/AuthContext.jsx";
 
 const MyPageUserInfo = ({user,logout}) => {
     const [editField, setEditField] = useState(null);
     const [tempValue, setTempValue] = useState("");
    const nav = useNavigate();
+   const {refreshUser} = useAuth();
    const {requestDelete} = useDelete();
     const handleEditStart = (field, currentVal) => {
         setEditField(field);
@@ -23,10 +25,10 @@ const MyPageUserInfo = ({user,logout}) => {
         };
         try {
             await axios.patch(`/api/user/update/${user.id}`,{[field]:tempValue});
-           alert(`${fieldNames[field]}이(가) 수정되었습니다. 
-                    수정된 정보는 다음 로그인부터 적용됩니다.`);
-           setEditField(null);
-           nav(0);
+            await refreshUser();
+            alert(`${fieldNames[field]}이(가) 수정되었습니다.`);
+            setEditField(null);
+            nav(0);
         }catch (e) {
             console.error("유저 정보 수정 실패:", e);
             alert("수정에 실패했습니다.");

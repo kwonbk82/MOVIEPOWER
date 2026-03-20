@@ -96,16 +96,18 @@ public class UserService {
         if (user.getProfileImg() != null) {
             String oldFilePath = fullPath + "/" + user.getProfileImg();
             fileService.deleteFile(oldFilePath);
+            user.updateProfileImg(null);
         }
 
-        // 2. 새 파일 업로드
-        String savedFileName = fileService.uploadFile(
-                fullPath,
-                file.getOriginalFilename(),
-                file.getBytes()
-        );
+        // 2. 새 파일 업로드 된 경우에만 DB업데이트
+        if (file != null && !file.isEmpty()) {
+            String savedFileName = fileService.uploadFile(
+                    fullPath,
+                    file.getOriginalFilename(),
+                    file.getBytes()
+            );
+            user.updateProfileImg(savedFileName);
+        }
 
-        // 3. DB에는 파일명만 업데이트
-        user.updateProfileImg(savedFileName);
     }
 }

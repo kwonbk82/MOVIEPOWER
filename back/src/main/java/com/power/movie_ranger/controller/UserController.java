@@ -5,6 +5,7 @@ import com.power.movie_ranger.dto.LoginRequestDto;
 import com.power.movie_ranger.dto.UserJoinDto;
 import com.power.movie_ranger.dto.UserUpdateDto;
 import com.power.movie_ranger.entity.User;
+import com.power.movie_ranger.repository.UserRepository;
 import com.power.movie_ranger.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
     @PostMapping("/join")
     public ResponseEntity<Long> join(@RequestBody @Valid UserJoinDto dto){
@@ -102,13 +104,15 @@ public class UserController {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
-        User userInfo = userDetails.getUser();
+        User userInfo = userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
 
         return ResponseEntity.ok().body(Map.of(
                 "email", userInfo.getEmail(),
                 "id",userInfo.getId(),
                 "nickName",userInfo.getNickName(),
+                "profileImg", userInfo.getProfileImg() != null ? userInfo.getProfileImg() : "",
                 "role", userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList()
@@ -136,7 +140,7 @@ public class UserController {
 
     @PostMapping("/profile")
     public ResponseEntity<String> updateProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                MultipartFile file) throws Exception{
+                                                @RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
